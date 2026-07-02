@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operator BIPA Unpad</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">B</div>
+        <div>
+          <strong>Operator BIPA</strong>
+          <small>Backend dashboard</small>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <button class="menu-item active" data-page="dashboard">Dashboard</button>
+        <button class="menu-item" data-page="pemelajar">Data Pemelajar</button>
+        <button class="menu-item" data-page="nilai">Nilai UTS/UAS</button>
+        <button class="menu-item" data-page="sertifikat">Sertifikat</button>
+        <button class="menu-item" data-page="survey">Survey</button>
+        <button class="menu-item" data-page="jadwal">Jadwal</button>
+        <button class="menu-item" data-page="pengaturan">Pengaturan</button>
+      </nav>
+
+      <div class="side-footer">
+        <span id="connectionStatus">Mode preview statis</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p>Kelola data akademik dan publikasi ke Portal Pemelajar BIPA.</p>
+        </div>
+        <div class="top-actions">
+          <button class="btn ghost" id="refreshBtn">Refresh</button>
+          <button class="btn primary" id="syncBtn">Simulasi Sinkron</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="stats">
+          <article><small>Total Pemelajar</small><strong id="statStudents">0</strong></article>
+          <article><small>Nilai Terunggah</small><strong id="statGrades">0</strong></article>
+          <article><small>Sertifikat</small><strong id="statCerts">0</strong></article>
+          <article><small>Survey Aktif</small><strong id="statSurvey">0</strong></article>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Aktivitas Operator</h2>
+          </div>
+          <div id="activityList" class="activity-list"></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-pemelajar">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Data Pemelajar</h2>
+            <button class="btn primary" id="addStudentBtn">Tambah Pemelajar</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Nama</th><th>Negara</th><th>Program</th><th>Kelas</th><th>Status</th></tr>
+              </thead>
+              <tbody id="studentRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-nilai">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Upload / Input Nilai</h2>
+            <button class="btn primary" id="addGradeBtn">Tambah Nilai</button>
+          </div>
+          <form class="form-grid" id="gradeForm">
+            <label>Nama Pemelajar
+              <select id="gradeStudent"></select>
+            </label>
+            <label>Materi
+              <input id="gradeSubject" placeholder="Contoh: Bahasa Indonesia Dasar" />
+            </label>
+            <label>Nilai UTS
+              <input id="gradeUts" type="number" min="0" max="100" placeholder="0-100" />
+            </label>
+            <label>Nilai UAS
+              <input id="gradeUas" type="number" min="0" max="100" placeholder="0-100" />
+            </label>
+            <button class="btn primary" type="submit">Simpan Nilai Preview</button>
+          </form>
+
+          <div class="table-wrap mt">
+            <table>
+              <thead>
+                <tr><th>Nama</th><th>Materi</th><th>UTS</th><th>UAS</th><th>Akhir</th><th>Status</th></tr>
+              </thead>
+              <tbody id="gradeRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-sertifikat">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Sertifikat</h2>
+            <button class="btn primary" id="addCertBtn">Tambah Sertifikat</button>
+          </div>
+          <p class="muted">Pada versi final, upload PDF dikirim ke Apps Script lalu disimpan ke Google Drive.</p>
+          <div class="table-wrap mt">
+            <table>
+              <thead><tr><th>Nama</th><th>Jenis</th><th>Status</th><th>Link</th></tr></thead>
+              <tbody id="certRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-survey">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Survey</h2>
+            <button class="btn primary" id="addSurveyBtn">Buat Survey</button>
+          </div>
+          <div id="surveyList" class="card-list"></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-jadwal">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Jadwal Minggu Ini</h2>
+          </div>
+          <div id="scheduleList" class="card-list"></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-pengaturan">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Pengaturan API</h2>
+          </div>
+          <p class="muted">Nanti isi URL Web App Apps Script di <code>config.js</code>.</p>
+          <pre class="codebox">window.BIPA_CONFIG = {
+  API_URL: "URL_APPS_SCRIPT_WEB_APP",
+  MODE: "preview"
+};</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="config.js"></script>
+  <script src="assets/operator.js"></script>
+</body>
+</html>
