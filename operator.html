@@ -1,0 +1,2141 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>Portal BIPA Unpad</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #161b27;
+    --surface2: #1e2537;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --muted2: #9ca3af;
+    --accent: #4f7cff;
+    --accent-dim: rgba(79,124,255,0.12);
+    --accent-hover: #6b93ff;
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.12);
+    --red: #ef4444;
+    --red-dim: rgba(239,68,68,0.12);
+    --yellow: #f59e0b;
+    --yellow-dim: rgba(245,158,11,0.12);
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0 }
+  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5 }
+  button, input, select, textarea { font: inherit; background: none; border: none; color: inherit; cursor: pointer }
+
+   
+  .app { display: grid; grid-template-columns: 220px 1fr; height: 100vh; overflow: hidden }
+
+   
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-top {
+    padding: 18px 16px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand { font-size: 13px; font-weight: 700; letter-spacing: .01em; color: var(--text) }
+  .brand-sub { font-size: 11px; color: var(--muted); margin-top: 2px }
+  .mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(79,124,255,0.2);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .mode-badge.op { background: var(--green-dim); border-color: rgba(34,197,94,0.2); color: var(--green) }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor }
+
+  nav { flex: 1; overflow-y: auto; padding: 8px }
+  .nav-section { padding: 16px 8px 4px; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700 }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted2);
+    text-align: left;
+    transition: background .12s, color .12s;
+    margin-bottom: 1px;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text) }
+  .nav-item.active { background: var(--accent-dim); color: var(--accent); font-weight: 600 }
+  .nav-item svg { opacity: .6; flex-shrink: 0 }
+  .nav-item.active svg { opacity: 1 }
+
+  .sidebar-foot {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+   
+  .main { display: flex; flex-direction: column; overflow: hidden }
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .page-title { font-size: 15px; font-weight: 700; flex: 1 }
+  .topbar-date { font-size: 12px; color: var(--muted) }
+  .content { flex: 1; overflow-y: auto; padding: 20px }
+
+   
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted2);
+    transition: all .12s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--border2); background: var(--surface2); color: var(--text) }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600 }
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff }
+  .btn-ghost { border-color: transparent; color: var(--muted2) }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text) }
+  .btn-sm { padding: 4px 9px; font-size: 12px; border-radius: 6px }
+  .btn-danger { color: var(--red); border-color: rgba(239,68,68,0.2); background: var(--red-dim) }
+
+  .chip { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 5px; font-size: 11px; font-weight: 600 }
+  .chip-green { background: var(--green-dim); color: var(--green) }
+  .chip-red { background: var(--red-dim); color: var(--red) }
+  .chip-yellow { background: var(--yellow-dim); color: var(--yellow) }
+  .chip-blue { background: var(--accent-dim); color: var(--accent) }
+  .chip-muted { background: rgba(107,114,128,0.15); color: var(--muted2) }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-title { font-size: 13px; font-weight: 700; flex: 1 }
+  .card-body { padding: 16px }
+
+   
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600 }
+  .stat-value { font-size: 24px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.1 }
+
+   
+  .filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .filter-label { font-size: 11px; color: var(--muted); font-weight: 600; white-space: nowrap }
+  .filter-select, .filter-input {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    padding: 5px 9px;
+    font-size: 12.5px;
+    color: var(--text);
+    min-height: 30px;
+    outline: none;
+  }
+  .filter-select:focus, .filter-input:focus { border-color: var(--accent) }
+  .filter-sep { flex: 1 }
+
+   
+  .table-wrap { overflow-x: auto }
+  .table { width: 100%; border-collapse: collapse; font-size: 13px }
+  .table th {
+    text-align: left;
+    padding: 9px 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 700;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    white-space: nowrap;
+  }
+  .table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .table tr:last-child td { border-bottom: 0 }
+  .table tbody tr:hover td { background: rgba(255,255,255,.02) }
+  .table-empty td { text-align: center; color: var(--muted); padding: 32px; font-size: 13px }
+
+   
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border) }
+  .cal-head-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; margin-bottom: 1px }
+  .cal-head-cell {
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface);
+  }
+  .cal-day {
+    background: var(--surface);
+    min-height: 96px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background .1s;
+    position: relative;
+  }
+  .cal-day:hover { background: var(--surface2) }
+  .cal-day.today { background: rgba(79,124,255,0.06) }
+  .cal-day.today .cal-day-num { color: var(--accent); font-weight: 800 }
+  .cal-day.other-month .cal-day-num { color: var(--muted) }
+  .cal-day.other-month { opacity: .4 }
+  .cal-day.holiday { background: rgba(34,197,94,0.04) }
+  .cal-day-num { font-size: 13px; font-weight: 600; color: var(--muted2); margin-bottom: 5px }
+  .cal-event {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cal-event.sub { background: var(--yellow-dim); color: var(--yellow) }
+  .cal-event.holiday { background: var(--green-dim); color: var(--green) }
+
+   
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px }
+  .week-col {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .week-col-head {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .week-col-date { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase }
+  .week-col-num { font-size: 20px; font-weight: 800; color: var(--text); line-height: 1.1; margin-top: 2px }
+  .week-col-num.today-num { color: var(--accent) }
+  .week-col-body { padding: 8px }
+  .week-item {
+    padding: 5px 8px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    border-left: 2px solid var(--accent);
+    background: rgba(79,124,255,0.06);
+  }
+  .week-item.sub { border-color: var(--yellow); background: rgba(245,158,11,0.06) }
+  .week-item.holiday { border-color: var(--green); background: rgba(34,197,94,0.06) }
+  .week-item-name { font-size: 12px; font-weight: 600; color: var(--text) }
+  .week-item-meta { font-size: 11px; color: var(--muted) }
+
+   
+  .matrix-wrap { overflow-x: auto }
+  .matrix th:first-child, .matrix td:first-child {
+    position: sticky; left: 0; z-index: 2;
+    background: var(--surface);
+  }
+  .matrix th:first-child { background: var(--surface2) }
+  .att-cell { text-align: center }
+  .att-h { background: rgba(34,197,94,0.08); color: var(--green); font-weight: 700 }
+  .att-th { background: rgba(239,68,68,0.08); color: var(--red); font-weight: 700 }
+
+   
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 80; align-items: center; justify-content: center; padding: 16px }
+  .overlay.open { display: flex }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  }
+  .modal-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--border) }
+  .modal-title { font-size: 15px; font-weight: 700; flex: 1 }
+  .modal-close { width: 28px; height: 28px; border-radius: 7px; background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 16px; display: flex; align-items: center; justify-content: center }
+  .modal-close:hover { color: var(--text) }
+  .modal-body { padding: 18px }
+  .modal-foot { padding: 14px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end }
+
+   
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px }
+  .field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em }
+  .field-input {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 11px;
+    font-size: 13.5px;
+    color: var(--text);
+    outline: none;
+    width: 100%;
+    transition: border-color .12s;
+  }
+  .field-input:focus { border-color: var(--accent) }
+
+   
+  .toast {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 12px 32px rgba(0,0,0,.4);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: .18s;
+    z-index: 100;
+    pointer-events: none;
+    max-width: 300px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0) }
+
+   
+  .loading {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .loading-inner { width: 280px }
+  .loading-title { font-size: 17px; font-weight: 800; margin-bottom: 6px }
+  .loading-sub { font-size: 12px; color: var(--muted); margin-bottom: 10px }
+  .loading-meta { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;font-size:11px;color:var(--muted2) }
+  .loading-meta span:first-child { color:var(--accent);font-weight:800 }
+  .progress-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .2s }
+
+   
+  .cell-input {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 4px 7px;
+    width: 100%;
+    min-width: 100px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: border-color .1s;
+  }
+  .cell-input:hover { border-color: var(--border2) }
+  .cell-input:focus { border-color: var(--accent); background: var(--surface2) }
+  .cell-input[disabled] { opacity: .6 }
+  .cell-select {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 4px 7px;
+    width: 100%;
+    min-width: 90px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .1s;
+     
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+    padding-right: 22px;
+  }
+  .cell-select:hover { border-color: var(--border2) }
+  .cell-select:focus { border-color: var(--accent); background: var(--surface2) }
+  .cell-select[disabled] { opacity: .6; cursor: default }
+
+   
+  .operator-only { display: none }
+  .page { display: none }
+  .page.active { display: block }
+
+   
+  .mobile-bar { display: none; background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; align-items: center; justify-content: space-between }
+  .mobile-title { font-size: 14px; font-weight: 700 }
+  .hamburger { width: 32px; height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; border-radius: 7px; background: var(--surface2); border: 1px solid var(--border) }
+  .hamburger span { width: 16px; height: 2px; background: var(--muted2); border-radius: 1px }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 50 }
+  .sidebar-overlay.open { display: block }
+
+   
+  .ptabs { display: flex; gap: 2px; padding: 4px; background: var(--surface2); border-radius: 10px; margin-bottom: 16px; flex-wrap: wrap }
+  .ptab { padding: 6px 12px; border-radius: 7px; font-size: 12.5px; font-weight: 500; color: var(--muted2) }
+  .ptab:hover { color: var(--text) }
+  .ptab.active { background: var(--surface); color: var(--text); font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.3) }
+  .ppanel { display: none }
+  .ppanel.active { display: block }
+
+
+
+  /* Eduvia-inspired visual refresh: dark academic dashboard, blue focus, rounded cards */
+  body {
+    background:
+      radial-gradient(circle at 12% 6%, rgba(7,58,211,.36), transparent 30%),
+      radial-gradient(circle at 86% 2%, rgba(101,127,67,.20), transparent 24%),
+      linear-gradient(145deg, #01040A 0%, #041B59 52%, #01040A 100%);
+  }
+  .app { grid-template-columns: 236px 1fr; background: rgba(1,4,10,.64) }
+  .sidebar {
+    background: linear-gradient(180deg, rgba(1,4,10,.92), rgba(4,27,89,.72));
+    backdrop-filter: blur(24px);
+    border-right: 1px solid rgba(227,231,233,.09);
+  }
+  .sidebar-top { padding: 22px 18px 18px }
+  .brand { font-size: 15px; letter-spacing: -.02em }
+  .brand-sub { color: rgba(227,231,233,.62) }
+  .mode-badge {
+    border-radius: 999px;
+    background: rgba(7,58,211,.20);
+    border-color: rgba(7,58,211,.36);
+    color: #c9d7ff;
+  }
+  .mode-badge.op { background: rgba(101,127,67,.20); color: #d6f5a4; border-color: rgba(101,127,67,.35) }
+  .nav-item { border-radius: 14px; padding: 9px 11px; margin-bottom: 5px }
+  .nav-item.active {
+    background: linear-gradient(135deg, rgba(7,58,211,.30), rgba(5,45,160,.24));
+    color: #E3E7E9;
+    box-shadow: inset 0 0 0 1px rgba(227,231,233,.08);
+  }
+  .main { background: rgba(1,4,10,.24) }
+  .topbar {
+    height: 62px;
+    border-bottom-color: rgba(227,231,233,.08);
+    background: rgba(1,4,10,.34);
+    backdrop-filter: blur(18px);
+  }
+  .page-title { font-size: 18px; letter-spacing: -.03em }
+  .content { padding: 26px }
+  .card, .stat-card, .week-col, .modal {
+    background: linear-gradient(180deg, rgba(227,231,233,.08), rgba(227,231,233,.035));
+    border-color: rgba(227,231,233,.10);
+    box-shadow: 0 20px 70px rgba(0,0,0,.26);
+    backdrop-filter: blur(18px);
+  }
+  .card { border-radius: 22px }
+  .card-header { padding: 17px 18px; border-bottom-color: rgba(227,231,233,.08) }
+  .card-title { font-size: 14px; letter-spacing: -.01em }
+  .stat-card { border-radius: 22px; padding: 18px 18px }
+  .stat-value { font-size: 28px; color: #E3E7E9 }
+  .filters {
+    background: rgba(1,4,10,.24);
+    border-bottom-color: rgba(227,231,233,.08);
+  }
+  .filter-select, .filter-input, .field-input, .cell-select, .cell-input {
+    background-color: rgba(1,4,10,.44);
+    border-color: rgba(227,231,233,.13);
+    border-radius: 12px;
+  }
+  .field-input:focus, .filter-select:focus, .filter-input:focus, .cell-select:focus, .cell-input:focus {
+    border-color: #073AD3;
+    box-shadow: 0 0 0 3px rgba(7,58,211,.20);
+  }
+  .btn { border-radius: 13px; min-height: 34px }
+  .btn-primary {
+    background: linear-gradient(135deg,#073AD3,#052DA0);
+    border-color: rgba(7,58,211,.8);
+  }
+  .btn-danger { background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.25) }
+  .btn-soft { background: rgba(227,231,233,.08); border-color: rgba(227,231,233,.12); color: #E3E7E9 }
+  .action-row { display:flex; gap:6px; flex-wrap:wrap; align-items:center }
+  .table th { background: rgba(1,4,10,.36) }
+  .table td, .table th { border-bottom-color: rgba(227,231,233,.08) }
+  .cal-head-cell { background: rgba(1,4,10,.42); border-radius: 10px; margin: 0 2px }
+  .cal-grid { gap: 8px; background: transparent }
+  .cal-day {
+    border: 1px solid rgba(227,231,233,.08);
+    border-radius: 18px;
+    background: rgba(227,231,233,.055);
+    min-height: 120px;
+  }
+  .cal-day:hover { background: rgba(227,231,233,.09); transform: translateY(-1px) }
+  .cal-day.today { box-shadow: inset 0 0 0 1px rgba(7,58,211,.75); background: rgba(7,58,211,.14) }
+  .cal-event { border-radius: 999px; padding: 3px 8px; background: rgba(7,58,211,.22); color:#dbe5ff }
+  .event-card {
+    border: 1px solid rgba(227,231,233,.10);
+    background: rgba(1,4,10,.28);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .event-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:13px }
+  .event-title { font-weight:800; font-size:15px }
+  .event-meta, .event-k { color: var(--muted2); font-size:12px }
+  .event-v { font-weight:650; margin-top:2px }
+  .day-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px }
+  .form-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:14px }
+  .field.full { grid-column: 1 / -1 }
+  .field-help { font-size:11px; color: var(--muted); margin-top:4px }
+  .wizard-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:14px }
+  .wizard-grid .field.full { grid-column: 1 / -1 }
+  .mini-note {
+    background: rgba(7,58,211,.12);
+    border: 1px solid rgba(7,58,211,.24);
+    padding: 11px 13px;
+    border-radius: 15px;
+    font-size: 12px;
+    color: #cdd9ff;
+    margin-bottom: 14px;
+  }
+  select:disabled, input:disabled {
+    opacity: .48;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 900px) {
+    .app { display: block; height: auto }
+    .sidebar { position: fixed; top: 0; left: -240px; height: 100vh; width: 220px; z-index: 60; transition: left .2s }
+    .sidebar.open { left: 0 }
+    .mobile-bar { display: flex }
+    .main { height: calc(100vh - 52px) }
+    .stats { grid-template-columns: repeat(2, 1fr) }
+    .week-grid { grid-template-columns: repeat(3, 1fr) }
+    .cal-grid { grid-template-columns: repeat(7, 1fr) }
+  }
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: 1fr 1fr }
+    .week-grid { grid-template-columns: 1fr 1fr }
+    .content { padding: 14px }
+    .filters { padding: 10px 12px }
+    .cal-day { min-height: 60px }
+  }
+
+
+/* Glass calendar refresh inspired by a student portal calendar style */
+:root{
+  --bg:#140915;
+  --surface:rgba(255,255,255,.075);
+  --surface2:rgba(255,255,255,.105);
+  --surface3:rgba(255,255,255,.16);
+  --border:rgba(227,215,244,.12);
+  --border2:rgba(227,215,244,.20);
+  --text:#f7f2fb;
+  --muted:#9d8faa;
+  --muted2:#d7cbe6;
+  --accent:#b1a5e1;
+  --accent-dim:rgba(177,165,225,.18);
+  --accent-hover:#c8bdf0;
+  --green:#90e6ba;
+  --green-dim:rgba(144,230,186,.16);
+  --red:#ff8aa1;
+  --red-dim:rgba(255,138,161,.16);
+  --yellow:#f2b3c7;
+  --yellow-dim:rgba(213,153,175,.20);
+  --pink:#d599af;
+  --wine:#440d21;
+  --radius:16px;
+  --radius-lg:24px;
+}
+html,body{
+  background:
+    radial-gradient(circle at 12% 12%, rgba(177,165,225,.30), transparent 34%),
+    radial-gradient(circle at 82% 20%, rgba(213,153,175,.22), transparent 33%),
+    linear-gradient(135deg,#130814 0%,#1a0d20 50%,#09070d 100%);
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.05),transparent 38%,rgba(255,255,255,.035));
+  z-index:-1;
+}
+.app{grid-template-columns:248px minmax(0,1fr);gap:18px;padding:18px;background:transparent}
+.sidebar,.topbar,.card,.modal,.stat-card,.week-col,.cal-day{
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  box-shadow:0 24px 70px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.sidebar{border-radius:28px;background:rgba(16,12,22,.62);border:1px solid var(--border2)}
+.sidebar-top{padding:22px 18px 16px}.brand{font-size:15px}.brand-sub{color:#b8a7c8}
+.mode-badge{border-radius:999px;background:rgba(144,230,186,.10);border-color:rgba(144,230,186,.20);color:var(--green)}
+nav{padding:10px}.nav-section{color:#8e7b9f}.nav-item{border-radius:16px;padding:10px 12px;color:#bdaecb}.nav-item:hover{background:rgba(255,255,255,.09)}.nav-item.active{background:linear-gradient(135deg,rgba(177,165,225,.22),rgba(213,153,175,.12));color:#fff;border:1px solid rgba(227,215,244,.14)}
+.main{border-radius:28px;overflow:hidden;background:rgba(12,8,17,.34);border:1px solid rgba(227,215,244,.08)}
+.topbar{height:64px;background:rgba(16,12,22,.55);border-bottom:1px solid var(--border)}.page-title{font-size:20px;letter-spacing:-.03em}.topbar-date{color:#baa8cc}.content{padding:24px}
+.btn{border-radius:999px;border-color:rgba(227,215,244,.18);background:rgba(255,255,255,.04);color:#d7cbe6}.btn:hover{background:rgba(255,255,255,.11);border-color:rgba(227,215,244,.28)}.btn-primary{background:linear-gradient(135deg,#b1a5e1,#d599af);border:0;color:#1b0b22;box-shadow:0 12px 28px rgba(177,165,225,.22)}.btn-primary:hover{background:linear-gradient(135deg,#c8bdf0,#ebb2c6);color:#17091b}.btn-danger{background:rgba(255,138,161,.14);border-color:rgba(255,138,161,.24);color:#ff9bad}
+.stats{gap:16px}.stat-card{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.045));border:1px solid var(--border);border-radius:24px;padding:18px}.stat-label{color:#b9a9c8}.stat-value{font-size:30px;color:#fff}
+.card{background:rgba(15,11,21,.56);border:1px solid var(--border);border-radius:28px}.card-header{padding:18px 20px;border-bottom:1px solid var(--border)}.card-title{font-size:15px;color:#fff}.card-body{padding:20px}
+.filters{background:rgba(255,255,255,.055);border-bottom:1px solid var(--border);padding:14px 18px}.filter-label{color:#b9a9c8}.filter-select,.filter-input,.field-input,.cell-select,.cell-input{background:rgba(255,255,255,.075);border:1px solid rgba(227,215,244,.18);border-radius:14px;color:#fff}.filter-select:focus,.filter-input:focus,.field-input:focus,.cell-select:focus,.cell-input:focus{border-color:#d599af;box-shadow:0 0 0 3px rgba(213,153,175,.14)}select option{background:#1c1023;color:#fff}
+.table th{background:rgba(255,255,255,.06);color:#b9a9c8;border-bottom:1px solid var(--border)}.table td{border-bottom:1px solid rgba(227,215,244,.08)}.table tbody tr:hover td{background:rgba(255,255,255,.045)}
+.week-grid{gap:14px}.week-col{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:22px}.week-col-head{padding:14px;border-bottom:1px solid var(--border)}.week-col-num{font-size:28px}.week-item{border-left:0;border-radius:16px;background:linear-gradient(135deg,rgba(177,165,225,.16),rgba(213,153,175,.10));padding:9px 10px;margin-bottom:8px}.week-item.sub{background:rgba(213,153,175,.12)}.week-item.holiday{background:rgba(144,230,186,.10)}
+.cal-shell{padding:16px}.cal-head-row{gap:10px;margin-bottom:10px;background:transparent}.cal-head-cell{background:transparent;color:#b9a9c8}.cal-grid{gap:10px;background:transparent}.cal-day{min-height:132px;background:rgba(255,255,255,.055);border:1px solid rgba(227,215,244,.10);border-radius:20px;padding:12px;overflow:hidden}.cal-day:hover{transform:translateY(-1px);background:rgba(255,255,255,.085);border-color:rgba(227,215,244,.20)}.cal-day.today{background:linear-gradient(160deg,rgba(177,165,225,.18),rgba(213,153,175,.10));border-color:rgba(213,153,175,.36)}.cal-day-num{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#d7cbe6;margin-bottom:9px}.cal-day.today .cal-day-num span:first-child{display:grid;place-items:center;width:28px;height:28px;border-radius:999px;background:#e3d7f4;color:#440d21;font-weight:900}.cal-day.other-month{opacity:.38}.cal-day.holiday{background:rgba(144,230,186,.07)}.cal-event{border-radius:12px;padding:5px 8px;margin-bottom:6px;background:rgba(177,165,225,.16);color:#efe9ff}.cal-event.sub{background:rgba(213,153,175,.17);color:#ffd8e5}.cal-event.holiday{background:rgba(144,230,186,.15);color:#bdffd9}.cal-add-mini{position:absolute;right:9px;bottom:9px;width:28px;height:28px;display:none;place-items:center;border-radius:999px;background:linear-gradient(135deg,#b1a5e1,#d599af);color:#210e25;font-weight:900}.is-op .cal-day:hover .cal-add-mini{display:grid}.empty-day{font-size:11px;color:rgba(215,203,230,.62);padding:5px 0}.more-day{font-size:11px;color:#d599af;margin-top:2px}
+.overlay{background:rgba(10,4,14,.62);backdrop-filter:blur(10px)}.modal{background:rgba(22,14,28,.86);border:1px solid rgba(227,215,244,.20);border-radius:28px}.modal-head{padding:18px 20px}.modal-close{border-radius:999px;background:rgba(255,255,255,.08)}.modal-body{padding:20px}.modal-foot{padding:16px 20px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field.full{grid-column:1/-1}.field{margin-bottom:0}.field-help{font-size:11px;color:var(--muted);margin-top:4px}.form-alert{background:rgba(213,153,175,.12);border:1px solid rgba(213,153,175,.22);color:#ffd8e5;padding:10px 12px;border-radius:16px;margin-bottom:14px;font-size:12px}.day-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.event-card{background:rgba(255,255,255,.055);border:1px solid rgba(227,215,244,.10);border-radius:20px;padding:14px;margin-bottom:12px}.event-title{font-size:15px;font-weight:800;color:#fff}.event-meta{font-size:12px;color:#bbaaca;margin-top:4px}.event-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}.event-k{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#9d8faa}.event-v{font-size:13px;color:#f5eff9;margin-top:2px}
+@media(max-width:900px){.app{padding:0;display:block}.main{border-radius:0;border:0}.sidebar{border-radius:0}.content{padding:16px}.cal-day{min-height:100px}.form-grid{grid-template-columns:1fr}.event-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.stats{grid-template-columns:1fr}.cal-head-row{gap:4px}.cal-grid{gap:4px}.cal-day{min-height:80px;border-radius:14px;padding:7px}.cal-event{font-size:10px;padding:3px 5px}.week-grid{grid-template-columns:1fr}.event-grid{grid-template-columns:1fr}}
+
+
+/* FIX: operator mode harus menampilkan tombol/kolom aksi */
+body.is-op .operator-only{display:inline-flex!important}
+body.is-op th.operator-only, body.is-op td.operator-only{display:table-cell!important}
+body.is-op button.operator-only, body.is-op .btn.operator-only{display:inline-flex!important}
+body:not(.is-op) .operator-only{display:none!important}
+
+
+/* Revisi: tombol export di bawah filter + detail pengajaran dosen per kelas */
+.export-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:0 18px 14px 18px;
+  background:rgba(255,255,255,.055);
+  border-bottom:1px solid var(--border);
+}
+.export-actions .export-label{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-right:4px;
+}
+.teaching-mini-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 7px;
+  min-width:560px;
+}
+.teaching-mini-table th{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--muted);
+  text-align:left;
+  padding:0 8px 2px 8px;
+}
+.teaching-mini-table td{
+  background:rgba(255,255,255,.055);
+  border-top:1px solid rgba(227,215,244,.10);
+  border-bottom:1px solid rgba(227,215,244,.10);
+  padding:9px 8px;
+  vertical-align:middle;
+}
+.teaching-mini-table td:first-child{
+  border-left:1px solid rgba(227,215,244,.10);
+  border-radius:14px 0 0 14px;
+}
+.teaching-mini-table td:last-child{
+  border-right:1px solid rgba(227,215,244,.10);
+  border-radius:0 14px 14px 0;
+}
+.teaching-main-name{font-weight:800;color:#fff;white-space:nowrap}
+.teaching-muted{font-size:12px;color:var(--muted)}
+@media(max-width:900px){.export-actions{padding:0 14px 12px}.teaching-mini-table{min-width:520px}}
+
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="loading-inner">
+    <div class="loading-title">Portal BIPA Unpad</div>
+    <div class="loading-sub" id="loadText">Memuat data...</div>
+    <div class="loading-meta"><span id="loadPct">0%</span><span id="loadEstimate">Estimasi 5-10 detik</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="loadBar" style="width:0%"></div></div>
+  </div>
+</div>
+
+
+<div class="mobile-bar">
+  <span class="mobile-title">Portal BIPA</span>
+  <button class="hamburger" id="hamburgerBtn"><span></span><span></span><span></span></button>
+</div>
+<div class="sidebar-overlay" id="sideOverlay"></div>
+
+<div class="app">
+
+  
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">Portal BIPA Unpad</div>
+      <div class="brand-sub">Rekap dosen & pemelajar</div>
+      <div class="mode-badge" id="modeBadge"><div class="dot"></div><span id="modeText">Publik</span></div>
+    </div>
+    <nav>
+      <div class="nav-section">Utama</div>
+      <button class="nav-item active" data-page="beranda">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 6l6-4 6 4v8H2V6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        Beranda
+      </button>
+      <button class="nav-item" data-page="program">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+        Program & Semester
+      </button>
+      <div class="nav-section">Dosen</div>
+      <button class="nav-item" data-page="dosen">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Daftar Dosen
+      </button>
+      <button class="nav-item" data-page="kalender">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1.5v3M11 1.5v3M1.5 7h13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Kalender Dosen
+      </button>
+      <button class="nav-item" data-page="rekap-dosen">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 12V4l4 4 4-6 4 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Rekap Dosen
+      </button>
+      <div class="nav-section">Pemelajar</div>
+      <button class="nav-item" data-page="pemelajar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 5l6 3 6-3-6-3zM2 11l6 3 6-3M2 8l6 3 6-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Data Pemelajar
+      </button>
+      <button class="nav-item" data-page="rekap-pemelajar">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 13V3h12v10H2zM6 3v10M10 3v10M2 7h12M2 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Rekap Kehadiran
+      </button>
+      <button class="nav-item" data-page="kehadiran">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Input Kehadiran
+      </button>
+      <button class="nav-item" data-page="dokumen">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 2h5l3 3v9a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5"/><path d="M9 2v4h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Dokumen
+      </button>
+      <div class="nav-section">Portal</div>
+      <button class="nav-item" data-page="portal">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 14h4M8 11v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Portal Pemelajar
+      </button>
+    </nav>
+    <div class="sidebar-foot">
+      <button class="btn btn-ghost" id="loginBtn" style="width:100%;justify-content:center">Masuk Operator</button>
+      <button class="btn btn-danger operator-only" id="logoutBtn" style="width:100%;justify-content:center;display:none">Keluar</button>
+      <div style="font-size:11px;color:var(--muted);text-align:center" id="saveStatus">Belum tersambung</div>
+    </div>
+  </aside>
+
+  
+  <main class="main">
+    <div class="topbar">
+      <span class="page-title" id="pageTitle">Beranda</span>
+      <span class="topbar-date" id="topDate"></span>
+    </div>
+    <div class="content">
+
+      
+      <div class="page active" id="page-beranda">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Semester Aktif</div>
+            <div class="stat-value" id="d-sem" style="font-size:16px;margin-top:6px">2026 Genap</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Dosen</div>
+            <div class="stat-value" id="d-dosen">12</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Pemelajar</div>
+            <div class="stat-value" id="d-pmj">48</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Jadwal Minggu Ini</div>
+            <div class="stat-value" id="d-week">0</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Minggu Ini</span>
+            <button class="btn btn-sm" data-goto="kalender">Lihat Kalender</button>
+          </div>
+          <div class="card-body">
+            <div class="week-grid" id="weekGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-program">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Semester</span>
+            <button class="btn btn-sm btn-soft operator-only" id="openWizardBtn">Buat Jadwal Semester</button>
+            <button class="btn btn-sm btn-primary operator-only" id="addSemBtn">Tambah Semester</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Label Semester</th><th>Bulan Aktif</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="semRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Program</span>
+            <button class="btn btn-sm btn-primary operator-only" id="addProgBtn">Tambah Program</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Nama</th><th>Mode</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="progRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Kelas</span>
+            <button class="btn btn-sm btn-primary operator-only" id="addClassBtn">Tambah Kelas</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Nama Kelas</th><th>Tipe</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="classRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Hari Libur</span>
+            <button class="btn btn-sm btn-primary operator-only" id="addHolBtn">Tambah Hari Libur</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Tanggal</th><th>Nama</th><th>Semester</th><th>Program</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="holRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-dosen">
+        <div class="card">
+          <div class="filters">
+            <span class="filter-label">Semester</span>
+            <select class="filter-select" id="dosenSem"><option value="all">Semua</option></select>
+            <span class="filter-label">Program</span>
+            <select class="filter-select" id="dosenProg"><option value="all">Semua</option></select>
+            <input class="filter-input" id="dosenQ" placeholder="Cari nama, kelas...">
+            <span class="filter-sep"></span>
+            <button class="btn btn-sm btn-primary operator-only" id="addDosenBtn">Tambah Dosen</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Nama Dosen</th><th>Detail Pengajaran Per Kelas</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="dosenRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-kalender">
+        <div class="card">
+          <div class="filters">
+            <input class="filter-input" type="month" id="calMonth">
+            <select class="filter-select" id="calSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="calProg"><option value="all">Semua Program</option></select>
+            <select class="filter-select" id="calClass"><option value="all">Semua Kelas</option></select>
+            <span class="filter-sep"></span>
+            <button class="btn btn-sm btn-primary operator-only" id="addSchedBtn">Tambah Jadwal</button>
+          </div>
+          <div class="card-body cal-shell" style="padding:16px">
+            <div class="cal-head-row" id="calHeadRow"></div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-rekap-dosen">
+        <div class="card">
+          <div class="filters">
+            <select class="filter-select" id="rdMode"><option value="semester">Per Semester</option><option value="month">Per Bulan</option></select>
+            <input class="filter-input" type="month" id="rdMonth" style="display:none">
+            <select class="filter-select" id="rdSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="rdProg"><option value="all">Semua Program</option></select>
+            <span class="filter-sep"></span>
+          </div>
+          <div class="export-actions">
+            <span class="export-label">Export hasil filter</span>
+            <button class="btn btn-sm" id="rdCsvBtn">Export CSV</button>
+            <button class="btn btn-sm btn-primary" id="rdPdfBtn">Export PDF</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Dosen</th><th>Kelas / Materi</th><th>Hadir</th><th>Tanggal Hadir</th><th>Menggantikan</th><th>Digantikan</th></tr></thead>
+              <tbody id="rdRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-pemelajar">
+        <div class="card">
+          <div class="filters">
+            <select class="filter-select" id="stSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="stProg"><option value="all">Semua Program</option></select>
+            <select class="filter-select" id="stClass"><option value="all">Semua Kelas</option></select>
+            <input class="filter-input" id="stQ" placeholder="Cari nama, negara...">
+            <span class="filter-sep"></span>
+            <button class="btn btn-sm btn-primary operator-only" id="addStudentBtn">Tambah Pemelajar</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Nama</th><th>Negara</th><th>Semester</th><th>Program</th><th>Kelas</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="stRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-rekap-pemelajar">
+        <div class="card">
+          <div class="filters">
+            <select class="filter-select" id="rpSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="rpProg"><option value="all">Semua Program</option></select>
+            <select class="filter-select" id="rpClass"><option value="all">Semua Kelas</option></select>
+            <span class="filter-sep"></span>
+          </div>
+          <div class="export-actions">
+            <span class="export-label">Export hasil filter</span>
+            <button class="btn btn-sm" id="rpCsvBtn">Export CSV</button>
+            <button class="btn btn-sm btn-primary" id="rpPdfBtn">Export PDF</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>No</th><th>Nama</th><th>Negara</th><th>Kelas</th><th>Total Pertemuan</th><th>H</th><th>TH</th><th>% Hadir</th></tr></thead>
+              <tbody id="rpRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-kehadiran">
+        <div class="card">
+          <div class="filters">
+            <span class="filter-label">Minggu</span>
+            <input class="filter-input" type="date" id="khWeek">
+            <select class="filter-select" id="khSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="khProg"><option value="all">Semua Program</option></select>
+            <select class="filter-select" id="khClass"><option value="all">Semua Kelas</option></select>
+            <span class="filter-sep"></span>
+            <button class="btn btn-sm btn-primary operator-only" id="fillAllBtn">Set Semua H</button>
+          </div>
+          <div class="card-body" id="khBody">
+            <div style="color:var(--muted);font-size:13px">Pilih filter untuk melihat kehadiran.</div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-dokumen">
+        <div class="card">
+          <div class="filters">
+            <select class="filter-select" id="docSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="docProg"><option value="all">Semua Program</option></select>
+            <select class="filter-select" id="docClass"><option value="all">Semua Kelas</option></select>
+            <input class="filter-input" id="docQ" placeholder="Cari nama...">
+            <span class="filter-sep"></span>
+            <button class="btn btn-sm" id="docCsvBtn">Export CSV</button>
+            <button class="btn btn-sm btn-primary operator-only" id="docPdfBtn">Export PDF</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>Nama</th><th>KITAS</th><th>Kadaluarsa KITAS</th><th>Paspor</th><th>Kadaluarsa Paspor</th><th>Izin Belajar</th><th>Kadaluarsa</th><th>Surat Pernyataan</th><th>CV</th><th class="operator-only">Aksi</th></tr></thead>
+              <tbody id="docRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="page" id="page-portal">
+        <div class="card">
+          <div class="filters">
+            <select class="filter-select" id="ppSem"><option value="all">Semua Semester</option></select>
+            <select class="filter-select" id="ppProg"><option value="all">Semua Program</option></select>
+            <select class="filter-select" id="ppClass"><option value="all">Semua Kelas</option></select>
+            <span class="filter-sep"></span>
+            <button class="btn btn-sm btn-primary operator-only" id="makeAccountsBtn">Buat Akun dari Data Pemelajar</button>
+          </div>
+          <div class="card-body" style="padding-bottom:0">
+            <div class="ptabs">
+              <button class="ptab active" data-ptab="accounts">Akun</button>
+              <button class="ptab" data-ptab="sessions">Presensi</button>
+              <button class="ptab" data-ptab="grades">Nilai</button>
+              <button class="ptab" data-ptab="forms">Survey/Form</button>
+              <button class="ptab" data-ptab="certs">Sertifikat</button>
+              <button class="ptab" data-ptab="gallery">Galeri</button>
+              <button class="ptab" data-ptab="modules">Modul</button>
+              <button class="ptab" data-ptab="tasks">Tugas</button>
+            </div>
+          </div>
+          <div class="ppanel active" data-ppanel="accounts">
+            <div class="card-header" style="border-top:1px solid var(--border)">
+              <span class="card-title">Akun Pemelajar</span>
+              <button class="btn btn-sm btn-primary operator-only" id="addAcctBtn">Tambah Akun</button>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Nama</th><th>Username</th><th>Password Awal</th><th>Status</th><th>Login Terakhir</th><th class="operator-only">Aksi</th></tr></thead>
+                <tbody id="acctRows"><tr class="table-empty"><td colspan="6">Belum ada akun pemelajar.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="sessions">
+            <div class="card-header" style="border-top:1px solid var(--border)">
+              <span class="card-title">Sesi Presensi</span>
+              <button class="btn btn-sm btn-primary operator-only" id="addSessBtn">Tambah Sesi</button>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Tanggal</th><th>Kelas</th><th>Materi</th><th>Dosen</th><th>Kode</th><th>Status</th><th class="operator-only">Aksi</th></tr></thead>
+                <tbody id="sessRows"><tr class="table-empty"><td colspan="7">Belum ada sesi.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="grades">
+            <div class="card-header" style="border-top:1px solid var(--border)">
+              <span class="card-title">Nilai Pemelajar</span>
+              <button class="btn btn-sm btn-primary operator-only" id="addGradeBtn">Tambah Nilai</button>
+            </div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>Nama</th><th>Materi</th><th>UTS</th><th>UAS</th><th>Nilai Akhir</th><th>Predikat</th><th class="operator-only">Aksi</th></tr></thead>
+                <tbody id="gradeRows"><tr class="table-empty"><td colspan="7">Belum ada nilai.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="forms">
+            <div class="table-wrap" style="padding:16px">
+              <div style="color:var(--muted);font-size:13px">Form dan survey akan muncul di sini.</div>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="certs">
+            <div class="table-wrap" style="padding:16px">
+              <div style="color:var(--muted);font-size:13px">Sertifikat dan transkrip akan muncul di sini.</div>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="gallery">
+            <div class="table-wrap" style="padding:16px">
+              <div style="color:var(--muted);font-size:13px">Galeri KKL dan kegiatan akan muncul di sini.</div>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="modules">
+            <div class="table-wrap" style="padding:16px">
+              <div style="color:var(--muted);font-size:13px">Modul pembelajaran akan muncul di sini.</div>
+            </div>
+          </div>
+          <div class="ppanel" data-ppanel="tasks">
+            <div class="table-wrap" style="padding:16px">
+              <div style="color:var(--muted);font-size:13px">Tugas video dan pengumpulan akan muncul di sini.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+
+<div class="overlay" id="loginModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head">
+      <span class="modal-title">Masuk Operator</span>
+      <button class="modal-close" data-close="loginModal">x</button>
+    </div>
+    <div class="modal-body">
+      <div id="loginErr" style="display:none;background:var(--red-dim);border:1px solid rgba(239,68,68,.2);color:var(--red);padding:8px 12px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+      <div class="field"><div class="field-label">Username</div><input class="field-input" id="loginUser" autocomplete="username"></div>
+      <div class="field"><div class="field-label">Password</div><input class="field-input" type="password" id="loginPass" autocomplete="current-password"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-close="loginModal">Batal</button>
+      <button class="btn btn-primary" id="doLoginBtn">Masuk</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="overlay" id="dayModal">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-head">
+      <span class="modal-title" id="dayModalTitle">Detail Jadwal</span>
+      <button class="modal-close" data-close="dayModal">x</button>
+    </div>
+    <div class="modal-body" id="dayModalBody"></div>
+    <div class="modal-foot">
+      <button class="btn" data-close="dayModal">Tutup</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="overlay" id="formModal">
+  <div class="modal" style="max-width:780px">
+    <div class="modal-head">
+      <span class="modal-title" id="formTitle">Form Data</span>
+      <button class="modal-close" data-close="formModal">x</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-alert" id="formHint">Isi data langsung di form ini. Tidak ada pop-up browser.</div>
+      <form id="recordForm">
+        <div id="formFields" class="form-grid"></div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="cancelFormBtn" type="button" data-close="formModal">Batal</button>
+      <button class="btn btn-primary" id="saveFormBtn" type="button">Simpan</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="overlay" id="wizardModal">
+  <div class="modal" style="max-width:860px">
+    <div class="modal-head">
+      <span class="modal-title">Buat Jadwal Semester</span>
+      <button class="modal-close" data-close="wizardModal">x</button>
+    </div>
+    <div class="modal-body">
+      <div class="mini-note">Gunakan ini untuk membuat jadwal seperti Google Calendar: pilih rentang tanggal, hari belajar, dosen, materi, jam, dan ruangan. Jam otomatis: Senin-Kamis 09.00-12.00, Jumat 08.30-11.00. Ruangan otomatis Gedung D, khusus International Internship menjadi Bale Motekar.</div>
+      <form id="wizardForm" class="wizard-grid">
+        <div class="field"><div class="field-label">Tanggal mulai</div><input class="field-input" type="date" name="startDate" required></div>
+        <div class="field"><div class="field-label">Tanggal berakhir</div><input class="field-input" type="date" name="endDate" required></div>
+        <div class="field"><div class="field-label">Semester</div><select class="field-input" name="semester" id="wizSem"></select></div>
+        <div class="field"><div class="field-label">Program</div><select class="field-input" name="program" id="wizProg"></select></div>
+        <div class="field"><div class="field-label">Kelas</div><select class="field-input" name="className" id="wizClass"></select></div>
+        <div class="field"><div class="field-label">Dosen</div><select class="field-input" name="lecturer" id="wizLecturer"></select></div>
+        <div class="field"><div class="field-label">Materi</div><select class="field-input" name="materi" id="wizMateri"></select></div>
+        <div class="field"><div class="field-label">Hari</div><select class="field-input" name="repeatDays" id="wizDays" multiple size="5"><option value="1">Senin</option><option value="2">Selasa</option><option value="3">Rabu</option><option value="4">Kamis</option><option value="5">Jumat</option></select></div>
+        <div class="field"><div class="field-label">Jam Senin-Kamis</div><input class="field-input" name="normalTime" value="09:00-12:00"></div>
+        <div class="field"><div class="field-label">Jam Jumat</div><input class="field-input" name="fridayTime" value="08:30-11:00"></div>
+        <div class="field full"><div class="field-label">Ruangan</div><input class="field-input" name="room" id="wizRoom" value="Gedung D"></div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-close="wizardModal">Batal</button>
+      <button class="btn btn-primary" type="button" id="generateScheduleBtn">Buat Jadwal</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const DAYS = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+const DAY_ORDER = ["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
+const BASE_MAT = ["Berbicara","Membaca","Menyimak","Menulis","Budaya"];
+
+let ST = {
+  user: null, token: sessionStorage.getItem("bipaToken") || "",
+  semesters: [], programs: [], classes: [], daftar_dosen: [], jadwal_dosen: [],
+  events: [], students: [], attendance: [], hari_libur: [], student_accounts: [],
+  attendance_sessions: [], grades: [], surveys: [], certificates: [], gallery: [],
+  forms: [], modules: [], assignments: [], submissions: [], pilihan: [],
+  program_semester_settings: [], lecturers: [], settings: [], sumber_upload: []
+};
+
+
+const $ = id => document.getElementById(id);
+function esc(v){ return String(v??"").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])) }
+function uid(p){ return (p||"id")+"-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7) }
+function todayIso(){ const d=new Date(),z=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate()) }
+function parseDate(s){ const d=new Date(String(s||todayIso()).slice(0,10)+"T00:00:00"); return isNaN(d)?new Date():d }
+function isoDate(d){ const z=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate()) }
+function addDays(s,n){ const d=parseDate(s); d.setDate(d.getDate()+n); return isoDate(d) }
+function startOfWeek(s){ const d=parseDate(s||todayIso()); const diff=(d.getDay()+6)%7; d.setDate(d.getDate()-diff); return isoDate(d) }
+function weekDates(s){ const sw=startOfWeek(s); return Array.from({length:7},(_,i)=>addDays(sw,i)) }
+function dayName(s){ return DAYS[parseDate(s).getDay()] }
+function fmtDate(s,opts){ if(!s)return"-"; return parseDate(s).toLocaleDateString("id-ID",opts||{weekday:"short",day:"2-digit",month:"short"}) }
+function fmtShort(s){ return fmtDate(s,{day:"2-digit",month:"2-digit"}) }
+function thisMonth(){ return todayIso().slice(0,7) }
+function arrJson(v){ if(Array.isArray(v))return v; const s=String(v||"").trim(); if(!s)return []; try{const a=JSON.parse(s);return Array.isArray(a)?a:[]}catch(e){return s.split(",").map(x=>x.trim()).filter(Boolean)} }
+function activeVal(v){ const t=String(v??"").trim().toLowerCase(); return v===true||t==="true"||t==="aktif"||t==="1"||t==="ya"||t===""||t==="undefined" }
+function meaningfulRow(table,r){
+  if(!r)return false;
+  if(table==="semesters")return !!(String(r.label||"").trim()||String(r.startDate||"").trim()||String(r.endDate||"").trim()||arrJson(r.monthsJson||r.months).length);
+  if(table==="programs")return !!String(r.name||"").trim();
+  if(table==="classes")return !!String(r.name||"").trim();
+  if(table==="hari_libur")return !!(String(r.date||"").trim()||String(r.name||"").trim());
+  return true;
+}
+function visibleRows(table){ return (ST[table]||[]).filter(r=>activeVal(r.active)&&meaningfulRow(table,r)); }
+function cleanLoadedGarbage(){
+  let removed=false;
+  ["semesters","programs","classes","hari_libur"].forEach(t=>{
+    const before=(ST[t]||[]).length;
+    ST[t]=(ST[t]||[]).filter(r=>meaningfulRow(t,r));
+    if((ST[t]||[]).length<before)removed=true;
+  });
+  if(removed)ST._garbageRemoved=true;
+}
+function normStatus(s){ const t=String(s||"").toLowerCase(); if(t==="h"||t.includes("hadir"))return"H"; if(t==="th"||t.includes("tidak"))return"TH"; return s||"" }
+function slugId(v){ return String(v||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,70)||"data" }
+function ensureIds(table, fields){
+  const seen=new Set();
+  (ST[table]||[]).forEach((r,i)=>{
+    if(!r.id){
+      const base=fields.map(f=>r[f]).filter(Boolean).join("-") || (table+"-"+i);
+      r.id=table.slice(0,4)+"-"+slugId(base);
+    }
+    let original=r.id, n=2;
+    while(seen.has(String(r.id))){ r.id=original+"-"+(n++); }
+    seen.add(String(r.id));
+    if(r.active==null && r.status!=null) r.active=r.status;
+    if(r.active==null) r.active="Aktif";
+  });
+}
+function lecturerKey(v){ return String(v||"").trim().toLowerCase() }
+function teachingText(items, prop){ return [...new Set(items.map(x=>x[prop]).filter(Boolean))].join(", ") || "-" }
+
+const LOAD_START=Date.now();
+function toast(m){ const el=$("toast"); el.textContent=m; el.classList.add("show"); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove("show"),2500) }
+function setProgress(p,t){
+  p=Math.max(0,Math.min(100,Number(p)||0));
+  $("loadBar").style.width=p+"%";
+  if(t)$("loadText").textContent=t;
+  const pct=$("loadPct"), est=$("loadEstimate");
+  if(pct)pct.textContent=Math.round(p)+"%";
+  if(est){
+    const elapsed=Math.max(1,Math.round((Date.now()-LOAD_START)/1000));
+    if(p>10&&p<100){
+      const total=Math.max(elapsed+1,Math.round(elapsed/(p/100)));
+      const remain=Math.max(1,total-elapsed);
+      est.textContent="Berjalan "+elapsed+" detik · sisa sekitar "+remain+" detik";
+    }else if(p>=100){ est.textContent="Selesai dalam "+elapsed+" detik"; }
+    else est.textContent="Estimasi 5-10 detik";
+  }
+}
+function isOp(){ return !!ST.user && !!ST.token }
+
+
+function canServer(){ return typeof google!=="undefined"&&google.script&&google.script.run }
+function server(name,args,ok,fail){
+  if(!canServer()){(fail||console.error)({message:"Buka via Apps Script Web App."});return}
+  google.script.run.withSuccessHandler(ok).withFailureHandler(fail||((e)=>toast(e.message||e)))[name].apply(google.script.run,args||[])
+}
+
+
+function activeSem(){ return visibleRows("semesters")[0]||ST.semesters.find(s=>activeVal(s.active))||ST.semesters[0]||{id:"",label:"-"} }
+function semObj(id){ return ST.semesters.find(s=>s.id===id)||{} }
+function progNames(){ return [...new Set([...ST.programs.filter(p=>activeVal(p.active)).map(p=>p.name),...ST.daftar_dosen.map(d=>d.program),...ST.students.map(s=>s.program)].filter(Boolean))].sort() }
+function classNames(){ return [...new Set([...ST.classes.filter(c=>activeVal(c.active)).map(c=>c.name),...ST.daftar_dosen.map(d=>d.className),...ST.students.map(s=>s.className)].filter(Boolean))].sort() }
+function lecNames(){ const m=new Map(); ST.daftar_dosen.filter(d=>activeVal(d.active)&&d.lecturer).forEach(d=>{const k=d.lecturer.toLowerCase();if(!m.has(k))m.set(k,d.lecturer)}); return [...m.values()].sort() }
+
+function materiNames(){
+  return [...new Set([...BASE_MAT, ...ST.daftar_dosen.map(d=>d.materi||d.kemahiran), ...ST.jadwal_dosen.map(j=>j.materi||j.kemahiran), ...ST.attendance_sessions.map(s=>s.materi), ...ST.grades.map(g=>g.materi)].filter(Boolean))].sort()
+}
+function defaultTimes(date){
+  return parseDate(date||todayIso()).getDay()===5 ? {startTime:"08:30", endTime:"11:00"} : {startTime:"09:00", endTime:"12:00"}
+}
+function defaultRoom(program){
+  return /international\s*internship/i.test(String(program||"")) ? "Bale Motekar" : "Gedung D"
+}
+function actionBtns(table,id){
+  if(!isOp())return "";
+  return `<div class="action-row"><button class="btn btn-sm" data-edit-table="${esc(table)}" data-edit-id="${esc(id)}">Edit</button>${delBtn(table,id)}</div>`
+}
+function parseTimeRange(v, fallback){
+  const s=String(v||"").replace(/\s/g,"");
+  const m=s.match(/^(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/);
+  return m ? {startTime:m[1],endTime:m[2]} : fallback;
+}
+
+function isHoliday(date,sem="all",prog="all",cls="all"){ return ST.hari_libur.find(h=>activeVal(h.active)&&h.date===date&&(!h.semester||h.semester==="Semua Semester"||h.semester===sem||sem==="all")&&(!h.program||h.program==="Semua Program"||h.program===prog||prog==="all")&&(!h.className||h.className==="Semua Kelas"||h.className===cls||cls==="all")) }
+function occursOnDate(j,date){
+  if(!j||!j.date)return false;
+  const start=String(j.date).slice(0,10);
+  const repeat=String(j.repeatType||j.repeat_type||"none").toLowerCase();
+  const until=String(j.repeatUntil||j.endDate||j.end_date||start).slice(0,10)||start;
+  if(date<start||date>until)return false;
+  const day=parseDate(date).getDay(), startDay=parseDate(start).getDay();
+  const custom=String(j.repeatDays||j.repeat_days||"").split(',').map(x=>Number(String(x).trim())).filter(x=>!isNaN(x));
+  if(repeat==="none"||!repeat)return date===start;
+  if(repeat==="daily")return true;
+  if(repeat==="weekly")return day===startDay;
+  if(repeat==="weekdays")return day>=1&&day<=5;
+  if(repeat==="custom")return custom.includes(day);
+  return date===start;
+}
+function schedulesOn(date,sem="all",prog="all",cls="all"){ return ST.jadwal_dosen.filter(j=>activeVal(j.active)&&occursOnDate(j,date)&&(sem==="all"||j.semester===sem)&&(prog==="all"||j.program===prog)&&(cls==="all"||j.className===cls)) }
+function eventFor(j,date){ const evDate=date||j.date; let e=ST.events.find(x=>x.scheduleId===j.id&&String(x.date||"").slice(0,10)===evDate); if(!e){e={id:uid("ev"),scheduleId:j.id,status:"Hadir",substitute:"",program:j.program,className:j.className,lecturer:j.lecturer,materi:j.materi,date:evDate};ST.events.push(e)} return e }
+function schedDisp(j,date){ const e=ST.events.find(x=>x.scheduleId===j.id&&String(x.date||"").slice(0,10)===(date||j.date)); if(e&&e.status==="Digantikan"&&e.substitute)return{name:e.substitute,original:j.lecturer,sub:true,event:e}; return{name:j.lecturer||"-",original:"",sub:false,event:e} }
+
+function normalize(data){
+  const TABLES=["semesters","programs","program_semester_settings","classes","daftar_dosen","jadwal_dosen","events","lecturers","students","attendance","hari_libur","settings","pilihan","sumber_upload","student_accounts","attendance_sessions","grades","surveys","certificates","gallery","forms","modules","assignments","submissions"];
+  TABLES.forEach(t=>ST[t]=Array.isArray(data&&data[t])?data[t]:[]);
+  ST.semesters=ST.semesters.map(s=>({...s,months:arrJson(s.monthsJson||s.months)}));
+  ST.jadwal_dosen=ST.jadwal_dosen.map(j=>({...j,date:String(j.date||"").slice(0,10),materi:j.materi||j.kemahiran||""}));
+  ST.events=ST.events.map(e=>({...e,date:String(e.date||"").slice(0,10),status:e.status==="Digantikan"?"Digantikan":"Hadir"}));
+  ST.attendance=ST.attendance.map(a=>({...a,date:String(a.date||"").slice(0,10),status:normStatus(a.status),semester:a.semester||activeSem().id}));
+  ST.hari_libur=ST.hari_libur.map(h=>({...h,date:String(h.date||"").slice(0,10)}));
+  ST.daftar_dosen=ST.daftar_dosen.map(d=>({...d,materi:d.materi||d.kemahiran||"",semester:d.semester||activeSem().id}));
+  ST.students=ST.students.map(s=>({...s,semester:s.semester||activeSem().id}));
+  cleanLoadedGarbage();
+  ensureIds("semesters",["id","label","name","startDate","endDate"]);
+  ensureIds("programs",["name","semesterMode","mode"]);
+  ensureIds("classes",["name","type","program"]);
+  ensureIds("hari_libur",["date","name","program","className"]);
+  ensureIds("daftar_dosen",["lecturer","program","className","materi"]);
+  ensureIds("jadwal_dosen",["date","lecturer","program","className","materi"]);
+  ensureIds("events",["scheduleId","date","lecturer"]);
+  ensureIds("students",["name","program","className"]);
+  ensureIds("student_accounts",["username","name"]);
+  ensureBase()
+}
+
+function ensureBase(){
+  if(!ST.semesters.length) ST.semesters.push({id:"2026-genap",label:"2026 Genap",months:["2026-02","2026-03","2026-04","2026-05"],active:"Aktif"});
+  ["Reguler","TIAS","KNB","Darmasiswa","Privat"].forEach(n=>{if(!ST.programs.some(p=>p.name===n))ST.programs.push({id:uid("prog"),name:n,semesterMode:"Semester",active:"Aktif"})});
+  if(!ST.classes.length)["Reguler 1","Reguler 2","TIAS 1"].forEach(n=>ST.classes.push({id:uid("cls"),name:n,type:"Kelas",active:"Aktif"}))
+}
+
+
+let saveTimer=null,saveBusy=false,saveQ=false;
+function queueSave(){ if(!isOp())return; $("saveStatus").textContent="Menunggu..."; clearTimeout(saveTimer); saveTimer=setTimeout(doSave,750) }
+function doSave(){
+  if(!isOp())return;
+  if(saveBusy){saveQ=true;return}
+  saveBusy=true; $("saveStatus").textContent="Menyimpan...";
+  const now=new Date().toISOString();
+  const payload={};
+  ["semesters","programs","program_semester_settings","classes","daftar_dosen","jadwal_dosen","events","lecturers","students","attendance","hari_libur","settings","pilihan","sumber_upload","student_accounts","attendance_sessions","grades","surveys","certificates","gallery","forms","modules","assignments","submissions"].forEach(t=>payload[t]=(ST[t]||[]).map(r=>({...r,updatedAt:r.updatedAt||now})));
+  server("saveAllData",[payload,ST.token],r=>{
+    saveBusy=false;
+    $("saveStatus").textContent=r&&r.ok?"Tersimpan "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"Gagal simpan";
+    if(saveQ){saveQ=false;doSave()}
+  },e=>{saveBusy=false;$("saveStatus").textContent="Gagal simpan";toast("Gagal: "+(e.message||e))})
+}
+
+
+function load(){
+  setProgress(15,"Kata Pak Ahmad: Sabar bro lagi loading...");
+  if(!canServer()){ 
+    setProgress(100,"Demo mode - tidak tersambung server");
+    setTimeout(()=>$("loading").style.display="none",600);
+    normalize({});renderAll();
+    return
+  }
+  server("getAllData",[],data=>{
+    setProgress(70,"Merapikan data...");
+    normalize((data&&data.data)||data||{});
+    refreshFilters();
+    setProgress(90,"Menyusun tampilan...");
+    renderAll();
+    if(ST.token) server("validateSession",[ST.token],r=>{
+      if(r&&r.ok){ST.user=r;applyMode()}
+      else{ST.token="";sessionStorage.removeItem("bipaToken");applyMode()}
+    },()=>{});
+    setTimeout(()=>$("loading").style.display="none",200)
+  },e=>{setProgress(100,"Gagal memuat: "+(e.message||e));setTimeout(()=>$("loading").style.display="none",1500)})
+}
+
+
+function operatorDisplay(el){
+  const tag=(el.tagName||"").toUpperCase();
+  if(tag==="TD"||tag==="TH")return "table-cell";
+  if(tag==="BUTTON"||tag==="A"||el.classList.contains("btn"))return "inline-flex";
+  return "block";
+}
+function applyMode(){
+  const on=isOp();
+  document.body.classList.toggle("is-op",on);
+  const badge=$("modeBadge"),txt=$("modeText");
+  badge.className="mode-badge"+(on?" op":"");
+  txt.textContent=on?("Operator: "+(ST.user.name||ST.user.username)):"Publik";
+  document.querySelectorAll(".operator-only").forEach(el=>{ el.style.display=on?operatorDisplay(el):"none"; });
+  if($("loginBtn"))$("loginBtn").style.display=on?"none":"inline-flex";
+  if($("logoutBtn"))$("logoutBtn").style.display=on?"inline-flex":"none";
+  renderAll();
+  if(on&&ST._garbageRemoved){ ST._garbageRemoved=false; queueSave(); }
+}
+
+function renderAll(){
+  renderTopDate();
+  renderDashboard();
+  renderProgram();
+  renderPortal();
+  renderCalendar();
+  renderDosen();
+  renderRekapDosen();
+  renderStudents();
+  renderRekapPemelajar();
+  renderKehadiran();
+  renderDocs();
+}
+
+function renderTopDate(){
+  $("topDate").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})
+}
+
+function renderDashboard(){
+  $("d-sem").textContent=activeSem().label||activeSem().id||"-";
+  $("d-dosen").textContent=lecNames().length;
+  $("d-pmj").textContent=ST.students.filter(s=>activeVal(s.active)).length;
+  const today=todayIso();
+  let weekTotal=0;
+  const dates=weekDates(today);
+  const html=dates.map(d=>{
+    const hol=isHoliday(d),sc=schedulesOn(d);
+    weekTotal+=sc.length;
+    const df=parseDate(d);
+    return `<div class="week-col" data-open-date="${d}">
+      <div class="week-col-head" style="cursor:pointer">
+        <div class="week-col-date">${DAYS[df.getDay()]}</div>
+        <div class="week-col-num ${d===today?"today-num":""}">${df.getDate()}</div>
+      </div>
+      <div class="week-col-body">
+        ${hol?`<div class="week-item holiday"><div class="week-item-name">${esc(hol.name||"Hari Libur")}</div></div>`:""}
+        ${sc.slice(0,4).map(j=>{const dsn=schedDisp(j);return`<div class="week-item ${dsn.sub?"sub":""}">
+          <div class="week-item-name">${esc(dsn.name)}</div>
+          <div class="week-item-meta">${esc(j.className||"-")} ${j.materi?`· ${esc(j.materi)}`:""}</div>
+          ${dsn.sub?`<div class="week-item-meta" style="color:var(--yellow)">ganti ${esc(dsn.original)}</div>`:""}
+        </div>`}).join("")}
+        ${sc.length>4?`<div style="font-size:11px;color:var(--muted);padding:4px 0">+${sc.length-4} lainnya</div>`:""}
+        ${!hol&&!sc.length?`<div style="font-size:11px;color:var(--muted);padding:4px 0">Tidak ada jadwal</div>`:""}
+      </div>
+    </div>`
+  }).join("");
+  $("weekGrid").innerHTML=html;
+  $("d-week").textContent=weekTotal;
+}
+
+function renderCalendar(){
+  const ym=$("calMonth").value||thisMonth();
+  const sem=$("calSem").value||"all",prog=$("calProg").value||"all",cls=$("calClass").value||"all";
+  const first=parseDate(ym+"-01"),start=new Date(first);start.setDate(first.getDate()-((first.getDay()+6)%7));
+  const today=todayIso();
+  const headHtml=DAY_ORDER.map(d=>`<div class="cal-head-cell">${d.slice(0,3)}</div>`).join("");
+  $("calHeadRow").innerHTML=headHtml;
+  let html="";
+  for(let i=0;i<42;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
+    const ds=isoDate(d),muted=ds.slice(0,7)!==ym,hol=isHoliday(ds,sem,prog,cls),sc=schedulesOn(ds,sem,prog,cls);
+    html+=`<div class="cal-day ${muted?"other-month":""} ${ds===today?"today":""} ${hol?"holiday":""}" data-open-date="${ds}" style="cursor:pointer">
+      <div class="cal-day-num">${d.getDate()}</div>
+      ${hol?`<div class="cal-event holiday">${esc(hol.name||"Libur")}</div>`:""}
+      ${sc.slice(0,3).map(j=>{const dsn=schedDisp(j,ds);return`<div class="cal-event ${dsn.sub?"sub":""}">${esc(j.startTime||"")} ${esc(dsn.name)} · ${esc(j.className||"-")}</div>`}).join("")}
+      ${sc.length>3?`<div class="more-day">+${sc.length-3} jadwal lain</div>`:""}
+      ${!hol&&!sc.length?`<div class="empty-day">Klik untuk tambah jadwal</div>`:""}
+      ${isOp()?`<button type="button" class="cal-add-mini" data-add-sched-date="${ds}">+</button>`:""}
+    </div>`
+  }
+  $("calGrid").innerHTML=html;
+}
+
+function openDay(date){
+  const sem=$("calSem")?.value||"all",prog=$("calProg")?.value||"all",cls=$("calClass")?.value||"all";
+  const hol=isHoliday(date,sem,prog,cls),sc=schedulesOn(date,sem,prog,cls).sort((a,b)=>String(a.startTime||"").localeCompare(String(b.startTime||"")));
+  $("dayModalTitle").textContent="Jadwal " + fmtDate(date,{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+  let html="";
+  if(hol) html+=`<div style="margin-bottom:12px"><span class="chip chip-green">${esc(hol.name||"Hari Libur")}</span></div>`;
+  if(!sc.length&&!hol) html+='<div style="color:var(--muted);font-size:13px;margin-bottom:16px">Belum ada jadwal pada tanggal ini.</div>';
+  sc.forEach(j=>{
+    const e=eventFor(j,date),dsn=schedDisp(j,date),subDisabled=e.status!=="Digantikan";
+    html+=`<div class="event-card">
+      <div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div class="event-title">${esc(j.materi||j.kemahiran||"Jadwal BIPA")}</div>
+          <div class="event-meta">${esc(j.startTime||"-")} - ${esc(j.endTime||"-")} · ${esc(j.className||"-")}</div>
+        </div>
+        ${isOp()?`<div class="action-row"><button class="btn btn-sm" data-edit-table="jadwal_dosen" data-edit-id="${esc(j.id)}" data-date-preset="${esc(date)}">Edit</button><button class="btn btn-danger btn-sm" data-del-table="jadwal_dosen" data-del-id="${esc(j.id)}">Hapus Jadwal</button></div>`:""}
+      </div>
+      <div class="event-grid">
+        <div><div class="event-k">Dosen</div><div class="event-v">${dsn.sub?`<span style="color:var(--yellow)">${esc(dsn.name)}</span><br><span class="event-meta">ganti ${esc(dsn.original)}</span>`:esc(dsn.name)}</div></div>
+        <div><div class="event-k">Program</div><div class="event-v">${esc(j.program||"-")}</div></div>
+        <div><div class="event-k">Kelas</div><div class="event-v">${esc(j.className||"-")}</div></div>
+        <div><div class="event-k">Ruang</div><div class="event-v">${esc(j.room||j.location||defaultRoom(j.program))}</div></div>
+      </div>
+      ${isOp()?`<div class="event-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div><div class="event-k">Status dosen</div><select class="cell-select" data-ev="${e.id}" data-field="status"><option ${e.status!=="Digantikan"?"selected":""}>Hadir</option><option ${e.status==="Digantikan"?"selected":""}>Digantikan</option></select></div>
+        <div><div class="event-k">Dosen pengganti</div><select class="cell-select" data-sub-for="${e.id}" data-ev="${e.id}" data-field="substitute" ${subDisabled?"disabled":""}><option value="">-</option>${lecNames().filter(n=>n!==j.lecturer).map(n=>`<option ${e.substitute===n?"selected":""}>${esc(n)}</option>`).join("")}</select></div>
+      </div>`:""}
+    </div>`
+  });
+  if(isOp()) html+=`<div class="day-actions"><button class="btn btn-primary btn-sm" data-add-sched-date="${date}">Tambah Jadwal Tanggal Ini</button><button class="btn btn-sm" data-add-sched-date="${date}" data-repeat-weekly="1">Tambah Jadwal Berulang</button></div>`;
+  $("dayModalBody").innerHTML=html;
+  $("dayModal").classList.add("open");
+}
+
+function renderDosen(){
+  const sem=$("dosenSem").value||"all",prog=$("dosenProg").value||"all",q=($("dosenQ").value||"").toLowerCase();
+  let source=ST.daftar_dosen.filter(d=>activeVal(d.active)&&(sem==="all"||d.semester===sem)&&(prog==="all"||d.program===prog));
+  if(q)source=source.filter(d=>[d.lecturer,d.className,d.materi,d.kemahiran,d.program].some(x=>String(x||"").toLowerCase().includes(q)));
+  const groups=new Map();
+  source.forEach(d=>{
+    const key=lecturerKey(d.lecturer||d.name);
+    if(!key)return;
+    if(!groups.has(key))groups.set(key,{lecturer:d.lecturer||d.name,items:[]});
+    groups.get(key).items.push(d);
+  });
+  const rows=[...groups.values()].sort((a,b)=>String(a.lecturer||"").localeCompare(String(b.lecturer||"")));
+  $("dosenRows").innerHTML=rows.length?rows.map(g=>{
+    const items=g.items.slice().sort((a,b)=>String((a.className||"")+(a.materi||"")).localeCompare(String((b.className||"")+(b.materi||""))));
+    const detail=`<div class="table-wrap" style="padding:0;overflow-x:auto"><table class="teaching-mini-table">
+      <thead><tr><th>Kelas</th><th>Program</th><th>Materi</th><th>Semester</th>${isOp()?"<th>Aksi Per Kelas</th>":""}</tr></thead>
+      <tbody>${items.map(it=>`<tr>
+        <td><span style="font-weight:700">${esc(it.className||"-")}</span></td>
+        <td>${esc(it.program||"-")}</td>
+        <td>${it.materi||it.kemahiran?`<span class="chip chip-blue">${esc(it.materi||it.kemahiran)}</span>`:"-"}</td>
+        <td><span class="teaching-muted">${esc((semObj(it.semester).label||it.semester)||"-")}</span></td>
+        ${isOp()?`<td><div class="action-row"><button class="btn btn-sm" data-edit-table="daftar_dosen" data-edit-id="${esc(it.id)}">Edit Materi/Kelas</button><button class="btn btn-danger btn-sm" data-del-table="daftar_dosen" data-del-id="${esc(it.id)}">Hapus Kelas</button></div></td>`:""}
+      </tr>`).join("")}</tbody>
+    </table></div>`;
+    const allActive=items.some(x=>activeVal(x.active));
+    return `<tr>
+      <td><span class="teaching-main-name">${esc(g.lecturer||"-")}</span></td>
+      <td>${detail}</td>
+      <td>${chipActive(allActive?"Aktif":"Nonaktif")}</td>
+      <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${isOp()?`<div class="action-row"><button class="btn btn-sm" data-add-teaching="${esc(g.lecturer)}">Tambah Kelas/Materi</button><button class="btn btn-danger btn-sm" data-del-lecturer="${esc(g.lecturer)}">Hapus Dosen</button></div>`:""}</td>
+    </tr>`;
+  }).join(""):'<tr class="table-empty"><td colspan="4">Belum ada dosen. Masuk operator lalu klik Tambah Dosen.</td></tr>';
+}
+function renderRekapDosen(){
+  const mode=$("rdMode").value,month=$("rdMonth").value||thisMonth(),sem=$("rdSem").value||"all",prog=$("rdProg").value||"all";
+  $("rdMonth").style.display=mode==="month"?"":"none";
+  const rows=ST.jadwal_dosen.filter(j=>activeVal(j.active)&&(prog==="all"||j.program===prog)&&((mode==="month"&&j.date.slice(0,7)===month)||(mode==="semester"&&(sem==="all"||j.semester===sem))));
+  const map={};
+  rows.forEach(j=>{
+    if(isHoliday(j.date,j.semester,j.program,j.className))return;
+    const e=eventFor(j),k=j.lecturer||"-";
+    if(!map[k])map[k]={name:k,desc:new Set(),hadir:[],sub:[],diganti:[]};
+    const desc=[j.program,j.className,j.materi].filter(Boolean).join(" / ");
+    map[k].desc.add(desc);
+    if(e.status==="Digantikan"){map[k].diganti.push(fmtShort(j.date));if(e.substitute){if(!map[e.substitute])map[e.substitute]={name:e.substitute,desc:new Set(),hadir:[],sub:[],diganti:[]};map[e.substitute].desc.add(desc);map[e.substitute].sub.push(fmtShort(j.date)+" ("+j.className+")")}}
+    else map[k].hadir.push(fmtShort(j.date))
+  });
+  const list=Object.values(map).sort((a,b)=>a.name.localeCompare(b.name));
+  $("rdRows").innerHTML=list.length?list.map(x=>`<tr>
+    <td><span style="font-weight:600">${esc(x.name)}</span></td>
+    <td style="color:var(--muted);font-size:12px">${esc([...x.desc].join("; ")||"-")}</td>
+    <td><span class="chip chip-green">${x.hadir.length}</span></td>
+    <td style="font-size:12px;color:var(--muted)">${esc(x.hadir.join(", ")||"-")}</td>
+    <td>${x.sub.length?`<span class="chip chip-yellow">${x.sub.length}</span>`:"-"}</td>
+    <td>${x.diganti.length?`<span class="chip chip-muted">${x.diganti.length}</span>`:"-"}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="6">Belum ada data rekap.</td></tr>'
+}
+
+function renderStudents(){
+  const sem=$("stSem").value||"all",prog=$("stProg").value||"all",cls=$("stClass").value||"all",q=($("stQ").value||"").toLowerCase();
+  let rows=ST.students.filter(s=>activeVal(s.active)&&(sem==="all"||s.semester===sem)&&(prog==="all"||s.program===prog)&&(cls==="all"||s.className===cls));
+  if(q)rows=rows.filter(s=>[s.name,s.country].some(x=>String(x||"").toLowerCase().includes(q)));
+  $("stRows").innerHTML=rows.length?rows.map(s=>`<tr>
+    <td><span style="font-weight:600">${esc(s.name||"-")}</span></td>
+    <td>${esc(s.country||"-")}</td>
+    <td>${esc((semObj(s.semester).label||s.semester)||"-")}</td>
+    <td>${esc(s.program||"-")}</td>
+    <td>${esc(s.className||"-")}</td>
+    <td>${activeVal(s.active)?'<span class="chip chip-green">Aktif</span>':'<span class="chip chip-muted">Nonaktif</span>'}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("students",s.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="7">Belum ada pemelajar.</td></tr>'
+}
+
+function renderRekapPemelajar(){
+  const sem=$("rpSem").value||"all",prog=$("rpProg").value||"all",cls=$("rpClass").value||"all";
+  const students=ST.students.filter(s=>activeVal(s.active)&&(sem==="all"||s.semester===sem)&&(prog==="all"||s.program===prog)&&(cls==="all"||s.className===cls));
+  const rows=students.map((s,i)=>{
+    const atts=ST.attendance.filter(a=>a.studentId===s.id&&(sem==="all"||a.semester===sem));
+    const h=atts.filter(a=>a.status==="H").length,th=atts.filter(a=>a.status==="TH").length,total=Math.max(h+th,1);
+    return{no:i+1,...s,h,th,total,pct:Math.round(h/total*100)}
+  });
+  $("rpRows").innerHTML=rows.length?rows.map(r=>`<tr>
+    <td style="color:var(--muted)">${r.no}</td>
+    <td><span style="font-weight:600">${esc(r.name)}</span></td>
+    <td>${esc(r.country||"-")}</td>
+    <td>${esc(r.className||"-")}</td>
+    <td>${r.total}</td>
+    <td><span class="chip chip-green">${r.h}</span></td>
+    <td>${r.th?`<span class="chip chip-red">${r.th}</span>`:"0"}</td>
+    <td><span style="font-weight:700;color:${r.pct>=80?"var(--green)":r.pct>=60?"var(--yellow)":"var(--red)"}">${r.pct}%</span></td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="8">Belum ada data pemelajar.</td></tr>'
+}
+
+function renderKehadiran(){
+  const box=$("khBody"); if(!box)return;
+  const sem=$("khSem")?.value||"all",prog=$("khProg")?.value||"all",cls=$("khClass")?.value||"all";
+  const dates=weekDates($("khWeek")?.value||todayIso()).filter(d=>{const day=parseDate(d).getDay();return day!==0&&day!==6&&!isHoliday(d,sem,prog,cls)});
+  const students=ST.students.filter(s=>activeVal(s.active)&&(sem==="all"||s.semester===sem)&&(prog==="all"||s.program===prog)&&(cls==="all"||s.className===cls));
+  if(!students.length){box.innerHTML='<div style="color:var(--muted);font-size:13px">Belum ada pemelajar pada filter ini.</div>';return}
+  if(!dates.length){box.innerHTML='<div style="color:var(--muted);font-size:13px">Tidak ada hari aktif pada minggu ini.</div>';return}
+  function getAtt(s,d){
+    let a=ST.attendance.find(x=>x.studentId===s.id&&x.date===d);
+    if(!a){a={id:uid("att"),studentId:s.id,studentName:s.name,semester:sem==="all"?activeSem().id:sem,program:s.program,className:s.className,date:d,status:"",materi:""};ST.attendance.push(a)}
+    return a
+  }
+  box.innerHTML=`<div class="matrix-wrap"><table class="table matrix">
+    <thead><tr><th>No / Nama</th>${dates.map(d=>`<th style="min-width:70px">${fmtDate(d,{weekday:"short",day:"2-digit",month:"2-digit"})}</th>`).join("")}</tr></thead>
+    <tbody>${students.map((s,i)=>`<tr>
+      <td>${i+1}. ${esc(s.name)}<br><span style="font-size:11px;color:var(--muted)">${esc(s.className||"")}</span></td>
+      ${dates.map(d=>{const a=getAtt(s,d),st=normStatus(a.status);return`<td class="att-cell ${st==="H"?"att-h":st==="TH"?"att-th":""}">${isOp()?`<select class="cell-select" style="min-width:54px;text-align:center" data-att-id="${a.id}"><option value=""></option><option ${st==="H"?"selected":""} value="H">H</option><option ${st==="TH"?"selected":""} value="TH">TH</option><option ${st==="I"?"selected":""} value="I">I</option><option ${st==="S"?"selected":""} value="S">S</option></select>`:esc(st||"-")}</td>`}).join("")}
+    </tr>`).join("")}
+    </tbody>
+  </table></div>`
+}
+
+function renderDocs(){
+  const sem=$("docSem").value||"all",prog=$("docProg").value||"all",cls=$("docClass").value||"all",q=($("docQ").value||"").toLowerCase();
+  let rows=ST.students.filter(s=>activeVal(s.active)&&(sem==="all"||s.semester===sem)&&(prog==="all"||s.program===prog)&&(cls==="all"||s.className===cls));
+  if(q)rows=rows.filter(s=>String(s.name||"").toLowerCase().includes(q));
+  const docChip=(v)=>{
+    if(!v||v==="")return`<span class="chip chip-muted">-</span>`;
+    if(v==="Ada")return`<span class="chip chip-green">Ada</span>`;
+    if(v==="Tidak Ada")return`<span class="chip chip-red">Tidak Ada</span>`;
+    if(v==="Kadaluarsa")return`<span class="chip chip-yellow">Kadaluarsa</span>`;
+    return`<span class="chip chip-muted">${esc(v)}</span>`;
+  };
+  $("docRows").innerHTML=rows.length?rows.map(s=>`<tr>
+    <td><span style="font-weight:600">${esc(s.name||"-")}</span></td>
+    <td>${docChip(s.KITAS)}</td>
+    <td style="font-size:12px;color:var(--muted)">${esc(s.KITAS_expiredAt||"-")}</td>
+    <td>${docChip(s.Paspor)}</td>
+    <td style="font-size:12px;color:var(--muted)">${esc(s.Paspor_expiredAt||"-")}</td>
+    <td>${docChip(s["Izin Belajar"])}</td>
+    <td style="font-size:12px;color:var(--muted)">${esc(s["Izin Belajar_expiredAt"]||"-")}</td>
+    <td>${docChip(s["Surat Pernyataan"])}</td>
+    <td>${docChip(s.CV)}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("students",s.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="10">Belum ada data dokumen.</td></tr>'
+}
+
+function refreshFilters(){
+  const semOpts=visibleRows("semesters").map(s=>`<option value="${esc(s.id)}">${esc(s.label||s.startDate||s.id)}</option>`).join("");
+  const progOpts=progNames().map(n=>`<option>${esc(n)}</option>`).join("");
+  const clsOpts=classNames().map(n=>`<option>${esc(n)}</option>`).join("");
+  const asSemOpts=`<option value="all">Semua Semester</option>`+semOpts;
+  const asProgOpts=`<option value="all">Semua Program</option>`+progOpts;
+  const asClsOpts=`<option value="all">Semua Kelas</option>`+clsOpts;
+  [["dosenSem",asSemOpts],["dosenProg",asProgOpts],["calSem",asSemOpts],["calProg",asProgOpts],["calClass",asClsOpts],["rdSem",asSemOpts],["rdProg",asProgOpts],["stSem",asSemOpts],["stProg",asProgOpts],["stClass",asClsOpts],["rpSem",asSemOpts],["rpProg",asProgOpts],["rpClass",asClsOpts],["khSem",asSemOpts],["khProg",asProgOpts],["khClass",asClsOpts],["docSem",asSemOpts],["docProg",asProgOpts],["docClass",asClsOpts],["ppSem",asSemOpts],["ppProg",asProgOpts],["ppClass",asClsOpts]].forEach(([id,opts])=>{const el=$(id);if(!el)return;const old=el.value;el.innerHTML=opts;if([...el.options].some(o=>o.value===old))el.value=old})
+}
+
+
+function chipActive(v){ return activeVal(v)?'<span class="chip chip-green">Aktif</span>':'<span class="chip chip-muted">Nonaktif</span>' }
+function delBtn(table,id){ return isOp()?`<button class="btn btn-danger btn-sm" data-del-table="${esc(table)}" data-del-id="${esc(id)}">Hapus</button>`:"" }
+
+function renderProgram(){
+  const semesters=visibleRows("semesters"), programs=visibleRows("programs"), classes=visibleRows("classes"), holidays=visibleRows("hari_libur");
+  const monthText=s=>Array.isArray(s.months)?s.months.join(", "):(s.monthsJson||s.startDate&&s.endDate?((s.startDate||"")+" - "+(s.endDate||"")):(s.months||"-"));
+  $("semRows").innerHTML=semesters.length?semesters.map(s=>`<tr>
+    <td><span style="font-weight:600">${esc(s.label||s.startDate||"-")}</span></td>
+    <td style="color:var(--muted);font-size:12px">${esc(monthText(s)||"-")}</td>
+    <td>${chipActive(s.active)}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("semesters",s.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="4">Belum ada semester.</td></tr>';
+  $("progRows").innerHTML=programs.length?programs.map(p=>{
+    const days=p.scheduleDays?" · Hari: "+p.scheduleDays:"";
+    const range=(p.startDate||p.endDate)?`<div style="font-size:11px;color:var(--muted);margin-top:3px">${esc(p.startDate||"-")} sampai ${esc(p.endDate||"-")}${esc(days)}</div>`:"";
+    return `<tr>
+      <td><span style="font-weight:600">${esc(p.name||"-")}</span>${range}</td>
+      <td>${esc(p.semesterMode||p.mode||"-")}<div style="font-size:11px;color:var(--muted);margin-top:3px">Normal ${esc(p.defaultStartTime||"09:00")}-${esc(p.defaultEndTime||"12:00")} · Jumat ${esc(p.fridayStartTime||"08:30")}-${esc(p.fridayEndTime||"11:00")}</div><div style="font-size:11px;color:var(--muted)">Ruang: ${esc(p.defaultRoom||defaultRoom(p.name))}</div></td>
+      <td>${chipActive(p.active)}</td>
+      <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("programs",p.id)}</td>
+    </tr>`
+  }).join(""):'<tr class="table-empty"><td colspan="4">Belum ada program.</td></tr>';
+  $("classRows").innerHTML=classes.length?classes.map(c=>`<tr>
+    <td><span style="font-weight:600">${esc(c.name||"-")}</span></td>
+    <td>${esc(c.type||c.program||"-")}</td>
+    <td>${chipActive(c.active)}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("classes",c.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="4">Belum ada kelas.</td></tr>';
+  $("holRows").innerHTML=holidays.length?holidays.map(h=>`<tr>
+    <td>${esc(fmtDate(h.date,{weekday:"short",day:"2-digit",month:"short",year:"numeric"}))}</td>
+    <td><span style="font-weight:600">${esc(h.name||"-")}</span></td>
+    <td>${esc((semObj(h.semester).label||h.semester)||"-")}</td>
+    <td>${esc(h.program||"-")}</td>
+    <td>${chipActive(h.active)}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("hari_libur",h.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="6">Belum ada hari libur.</td></tr>';
+}
+
+function renderPortal(){
+  const sem=$("ppSem")?.value||"all",prog=$("ppProg")?.value||"all",cls=$("ppClass")?.value||"all";
+  const studentOk=s=>(sem==="all"||s.semester===sem)&&(prog==="all"||s.program===prog)&&(cls==="all"||s.className===cls);
+  const names=new Set(ST.students.filter(studentOk).map(s=>s.id));
+  const accounts=ST.student_accounts.filter(a=>!a.studentId||names.has(a.studentId)||sem==="all"&&prog==="all"&&cls==="all");
+  $("acctRows").innerHTML=accounts.length?accounts.map(a=>`<tr>
+    <td><span style="font-weight:600">${esc(a.name||a.studentName||"-")}</span></td>
+    <td>${esc(a.username||"-")}</td>
+    <td>${esc(a.password||a.initialPassword||"-")}</td>
+    <td>${chipActive(a.active||a.status)}</td>
+    <td style="font-size:12px;color:var(--muted)">${esc(a.lastLogin||"-")}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("student_accounts",a.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="6">Belum ada akun pemelajar.</td></tr>';
+  const sessions=ST.attendance_sessions.filter(x=>(prog==="all"||x.program===prog)&&(cls==="all"||x.className===cls));
+  $("sessRows").innerHTML=sessions.length?sessions.map(x=>`<tr>
+    <td>${esc(fmtDate(x.date,{day:"2-digit",month:"short",year:"numeric"}))}</td>
+    <td>${esc(x.className||"-")}</td><td>${esc(x.materi||"-")}</td><td>${esc(x.lecturer||"-")}</td><td><span class="chip chip-blue">${esc(x.code||"-")}</span></td><td>${chipActive(x.active||x.status)}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("attendance_sessions",x.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="7">Belum ada sesi.</td></tr>';
+  const grades=ST.grades.filter(g=>!g.studentId||names.has(g.studentId)||sem==="all"&&prog==="all"&&cls==="all");
+  $("gradeRows").innerHTML=grades.length?grades.map(g=>`<tr>
+    <td><span style="font-weight:600">${esc(g.studentName||g.name||"-")}</span></td><td>${esc(g.materi||"-")}</td><td>${esc(g.uts||"-")}</td><td>${esc(g.uas||"-")}</td><td>${esc(g.final||g.nilaiAkhir||"-")}</td><td>${esc(g.predicate||g.predikat||"-")}</td>
+    <td class="operator-only" style="display:${isOp()?"table-cell":"none"}">${actionBtns("grades",g.id)}</td>
+  </tr>`).join(""):'<tr class="table-empty"><td colspan="7">Belum ada nilai.</td></tr>';
+}
+
+function formOptions(type){
+  const sem=ST.semesters.map(s=>({value:s.id||s.label,label:s.label||s.id})).filter(x=>x.value);
+  const prog=progNames().map(x=>({value:x,label:x}));
+  const cls=classNames().map(x=>({value:x,label:x}));
+  const lec=lecNames().map(x=>({value:x,label:x}));
+  const active=[{value:"Aktif",label:"Aktif"},{value:"Nonaktif",label:"Nonaktif"}];
+  return {sem,prog,cls,lec,active,mode:[{value:"Semester",label:"Semester"},{value:"Fleksibel",label:"Fleksibel"},{value:"Mingguan",label:"Mingguan"}],repeat:[{value:"none",label:"Tidak berulang"},{value:"daily",label:"Setiap hari"},{value:"weekly",label:"Mingguan"},{value:"weekdays",label:"Senin-Jumat"},{value:"custom",label:"Hari tertentu"}]};
+}
+function fieldDef(type){
+  const o=formOptions(type);
+  const mat=materiNames().map(x=>({value:x,label:x}));
+  if(type==="semesters")return [fld("label","Label semester","text",null,true),fld("startDate","Tanggal mulai","date"),fld("endDate","Tanggal berakhir","date"),fld("monthsJson","Bulan aktif","text",null,false,"Contoh: 2026-02,2026-03,2026-04"),fld("active","Status","select",o.active)];
+  if(type==="programs")return [fld("name","Nama program","text",null,true),fld("semesterMode","Mode program","select",o.mode),fld("startDate","Tanggal mulai","date"),fld("endDate","Tanggal berakhir","date"),fld("scheduleDays","Hari jadwal","text",null,false,"Isi angka hari 1-5. Contoh 1,2,3,4,5 untuk Senin-Jumat."),fld("defaultStartTime","Jam normal mulai","time",null,false,"Default 09:00"),fld("defaultEndTime","Jam normal selesai","time",null,false,"Default 12:00"),fld("fridayStartTime","Jam Jumat mulai","time",null,false,"Default 08:30"),fld("fridayEndTime","Jam Jumat selesai","time",null,false,"Default 11:00"),fld("defaultRoom","Ruangan default","text",null,false,"Gedung D, kecuali International Internship di Bale Motekar."),fld("meetingsPerWeek","Pertemuan per minggu","number"),fld("totalMeetings","Total pertemuan","number"),fld("active","Status","select",o.active)];
+  if(type==="classes")return [fld("name","Nama kelas","text",null,true),fld("type","Tipe / program","selectfree",o.prog),fld("active","Status","select",o.active)];
+  if(type==="hari_libur")return [fld("date","Tanggal","date",null,true),fld("name","Nama libur","text",null,true),fld("semester","Semester","select",o.sem),fld("program","Program","select",o.prog),fld("className","Kelas","select",o.cls),fld("active","Status","select",o.active)];
+  if(type==="daftar_dosen")return [fld("lecturer","Nama dosen","selectfree",o.lec,true),fld("semester","Semester","select",o.sem),fld("program","Program","select",o.prog),fld("className","Kelas","select",o.cls),fld("materi","Materi / kemahiran","selectfree",mat,true),fld("active","Status","select",o.active)];
+  if(type==="jadwal_dosen")return [fld("date","Tanggal mulai","date",null,true),fld("semester","Semester","select",o.sem),fld("program","Program","select",o.prog),fld("className","Kelas","select",o.cls),fld("lecturer","Dosen","selectfree",o.lec,true),fld("materi","Materi","selectfree",mat,true),fld("startTime","Jam mulai","time",null,true),fld("endTime","Jam selesai","time"),fld("room","Ruang","text"),fld("repeatType","Pengulangan","select",o.repeat),fld("repeatUntil","Berulang sampai","date"),fld("repeatDays","Hari custom","text",null,false,"Isi angka 0-6. 1=Senin, 2=Selasa, 5=Jumat. Contoh: 1,3,5"),fld("active","Status","select",o.active)];
+  if(type==="students")return [fld("name","Nama pemelajar","text",null,true),fld("country","Negara","text"),fld("semester","Semester","select",o.sem),fld("program","Program","select",o.prog),fld("className","Kelas","select",o.cls),fld("active","Status","select",o.active),fld("KITAS","KITAS","text"),fld("KITAS_expiredAt","Masa berlaku KITAS","date"),fld("Paspor","Paspor","text"),fld("Paspor_expiredAt","Masa berlaku Paspor","date"),fld("Izin Belajar","Izin Belajar","text"),fld("Izin Belajar_expiredAt","Masa berlaku Izin","date"),fld("Surat Pernyataan","Surat Pernyataan","text"),fld("CV","CV","text")];
+  if(type==="student_accounts")return [fld("name","Nama pemelajar","selectfree",ST.students.map(s=>({value:s.name,label:s.name})),true),fld("username","Username","text",null,true),fld("password","Password","text",null,true),fld("active","Status","select",o.active)];
+  if(type==="attendance_sessions")return [fld("date","Tanggal","date",null,true),fld("program","Program","select",o.prog),fld("className","Kelas","select",o.cls),fld("materi","Materi","selectfree",mat),fld("lecturer","Dosen","selectfree",o.lec),fld("code","Kode absen","text"),fld("active","Status","select",o.active)];
+  if(type==="grades")return [fld("studentName","Nama pemelajar","selectfree",ST.students.map(s=>({value:s.name,label:s.name})),true),fld("materi","Materi","selectfree",mat),fld("uts","UTS","number"),fld("uas","UAS","number"),fld("final","Nilai akhir","number"),fld("predicate","Predikat","text")];
+  return [];
+}
+
+function fld(name,label,type,options,required,help){return{name,label,type:type||"text",options:options||[],required:!!required,help:help||""}}
+function typeTitle(t){return({semesters:"Semester",programs:"Program",classes:"Kelas",hari_libur:"Hari Libur",daftar_dosen:"Dosen",jadwal_dosen:"Jadwal",students:"Pemelajar",student_accounts:"Akun Pemelajar",attendance_sessions:"Sesi Absensi",grades:"Nilai"})[t]||t}
+function openForm(type,row,preset){
+  if(!isOp()){toast("Masuk operator dulu.");return}
+  const baseDate=(preset&&preset.date)||todayIso();
+  const t=defaultTimes(baseDate);
+  const selectedProgram=$("calProg")?.value!=="all"?$("calProg")?.value:"";
+  const selectedClass=$("calClass")?.value!=="all"?$("calClass")?.value:"";
+  const data={active:"Aktif",semester:activeSem().id,program:selectedProgram,className:selectedClass,repeatType:"none",date:baseDate,repeatUntil:baseDate,startTime:t.startTime,endTime:t.endTime,room:defaultRoom(selectedProgram),defaultStartTime:"09:00",defaultEndTime:"12:00",fridayStartTime:"08:30",fridayEndTime:"11:00",defaultRoom:defaultRoom((row&&row.name)||selectedProgram),code:Math.random().toString(36).slice(2,7).toUpperCase(),...(preset||{}),...(row||{})};
+  if(type==="jadwal_dosen"){
+    const tt=defaultTimes(data.date);
+    if(!data.startTime)data.startTime=tt.startTime;
+    if(!data.endTime)data.endTime=tt.endTime;
+    if(!data.room)data.room=defaultRoom(data.program);
+    if(!data.repeatUntil)data.repeatUntil=data.date||todayIso();
+  }
+  if(type==="hari_libur"&&!data.date)data.date=todayIso();
+  ST.form={type,id:row?row.id:"",data};
+  $("formTitle").textContent=(row?"Edit ":"Tambah ")+typeTitle(type);
+  $("formHint").textContent=type==="jadwal_dosen"?"Atur jadwal seperti Google Calendar: pilih tanggal, jam, program, kelas, dosen, materi, ruangan, dan pola pengulangan.":"Isi data langsung di form ini. Tidak ada pop-up browser.";
+  $("formFields").innerHTML=fieldDef(type).map(f=>fieldHtml(f,data,type)).join("");
+  $("formModal").classList.add("open");
+}
+
+function fieldHtml(f,data,type){
+  const value=data[f.name]??"";
+  const full=(f.name==="repeatDays"||f.name==="monthsJson"||f.name==="scheduleDays"||f.name==="Surat Pernyataan")?" full":"";
+  let input="";
+  if(f.type==="select")input=`<select class="field-input" name="${esc(f.name)}" ${f.required?"required":""}><option value=""></option>${f.options.map(o=>`<option value="${esc(o.value)}" ${String(value)===String(o.value)?"selected":""}>${esc(o.label)}</option>`).join("")}</select>`;
+  else if(f.type==="selectfree"){
+    const lid="list_"+type+"_"+f.name;
+    input=`<input class="field-input" name="${esc(f.name)}" value="${esc(value)}" list="${esc(lid)}" ${f.required?"required":""}><datalist id="${esc(lid)}">${f.options.map(o=>`<option value="${esc(o.value)}">${esc(o.label)}</option>`).join("")}</datalist>`;
+  } else input=`<input class="field-input" type="${esc(f.type)}" name="${esc(f.name)}" value="${esc(value)}" ${f.required?"required":""}>`;
+  return `<div class="field${full}"><div class="field-label">${esc(f.label)}</div>${input}${f.help?`<div class="field-help">${esc(f.help)}</div>`:""}</div>`;
+}
+function saveEditorForm(){
+  if(!ST.form)return;
+  const form=$("recordForm");
+  if(!form.reportValidity())return;
+  const fd=new FormData(form);
+  const row={...ST.form.data};
+  for(const [k,v] of fd.entries())row[k]=String(v).trim();
+  if(!row.id)row.id=uid(ST.form.type.slice(0,4));
+  if(ST.form.type==="semesters")row.months=arrJson(row.monthsJson||row.months);
+  if(ST.form.type==="programs"){
+    if(!row.defaultStartTime)row.defaultStartTime="09:00";
+    if(!row.defaultEndTime)row.defaultEndTime="12:00";
+    if(!row.fridayStartTime)row.fridayStartTime="08:30";
+    if(!row.fridayEndTime)row.fridayEndTime="11:00";
+    if(!row.defaultRoom)row.defaultRoom=defaultRoom(row.name);
+  }
+  if(ST.form.type==="jadwal_dosen"){const tt=defaultTimes(row.date); row.hari=dayName(row.date); if(!row.startTime)row.startTime=tt.startTime; if(!row.endTime)row.endTime=tt.endTime; if(!row.room)row.room=defaultRoom(row.program); if(!row.repeatType)row.repeatType="none"; if(row.repeatType==="none")row.repeatUntil=row.date;}
+  if(ST.form.type==="student_accounts"){
+    const st=ST.students.find(s=>String(s.name).toLowerCase()===String(row.name).toLowerCase());
+    if(st)row.studentId=st.id;
+  }
+  if(ST.form.type==="grades"){
+    const st=ST.students.find(s=>String(s.name).toLowerCase()===String(row.studentName).toLowerCase());
+    if(st)row.studentId=st.id;
+  }
+  const arr=ST[ST.form.type]||(ST[ST.form.type]=[]);
+  const idx=arr.findIndex(x=>String(x.id)===String(row.id));
+  if(idx>=0)arr[idx]=row; else arr.push(row);
+  $("formModal").classList.remove("open");
+  ST.form=null;
+  refreshFilters(); queueSave(); renderAll(); toast("Data disimpan");
+}
+function addRecord(type,datePreset){ openForm(type,null,datePreset?{date:datePreset,repeatUntil:datePreset}:null) }
+
+
+function fillWizardOptions(){
+  const semOpts=ST.semesters.map(s=>`<option value="${esc(s.id||s.label)}">${esc(s.label||s.id)}</option>`).join("");
+  const progOpts=progNames().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  const clsOpts=classNames().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  const lecOpts=lecNames().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  const matOpts=materiNames().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  $("wizSem").innerHTML=semOpts;
+  $("wizProg").innerHTML='<option value=""></option>'+progOpts;
+  $("wizClass").innerHTML='<option value=""></option>'+clsOpts;
+  $("wizLecturer").innerHTML='<option value=""></option>'+lecOpts;
+  $("wizMateri").innerHTML='<option value=""></option>'+matOpts;
+  const f=$("wizardForm");
+  f.startDate.value=f.startDate.value||todayIso();
+  f.endDate.value=f.endDate.value||addDays(todayIso(),30);
+  f.semester.value=f.semester.value||activeSem().id;
+  if(!f.room.value){ const pr=ST.programs.find(p=>String(p.name||"").toLowerCase()===String(f.program.value||"").toLowerCase())||{}; f.room.value=pr.defaultRoom||defaultRoom(f.program.value); }
+}
+function openScheduleWizard(){
+  if(!isOp()){toast("Masuk operator dulu.");return}
+  fillWizardOptions();
+  $("wizardModal").classList.add("open");
+}
+function generateScheduleWizard(){
+  if(!isOp()){toast("Masuk operator dulu.");return}
+  const f=$("wizardForm");
+  if(!f.reportValidity())return;
+  const days=[...f.repeatDays.selectedOptions].map(o=>Number(o.value));
+  if(!days.length){toast("Pilih minimal satu hari.");return}
+  const start=f.startDate.value,end=f.endDate.value;
+  if(end<start){toast("Tanggal berakhir harus setelah tanggal mulai.");return}
+  let count=0,d=start;
+  while(d<=end){
+    const day=parseDate(d).getDay();
+    if(days.includes(day)){
+      const progRec=ST.programs.find(p=>String(p.name||"").toLowerCase()===String(f.program.value||"").toLowerCase())||{};
+      const fallback=day===5?{startTime:progRec.fridayStartTime||"08:30",endTime:progRec.fridayEndTime||"11:00"}:{startTime:progRec.defaultStartTime||"09:00",endTime:progRec.defaultEndTime||"12:00"};
+      const time=day===5?parseTimeRange(f.fridayTime.value,fallback):parseTimeRange(f.normalTime.value,fallback);
+      ST.jadwal_dosen.push({
+        id:uid("jdwl"), semester:f.semester.value||activeSem().id, program:f.program.value, className:f.className.value,
+        lecturer:f.lecturer.value, materi:f.materi.value, kemahiran:f.materi.value, date:d, hari:dayName(d),
+        startTime:time.startTime, endTime:time.endTime, room:f.room.value||progRec.defaultRoom||defaultRoom(f.program.value),
+        repeatType:"none", repeatUntil:d, active:"Aktif"
+      });
+      count++;
+    }
+    d=addDays(d,1);
+  }
+  $("wizardModal").classList.remove("open");
+  queueSave(); refreshFilters(); renderAll(); toast("Berhasil membuat "+count+" jadwal.");
+}
+
+function makeStudentAccounts(){
+  if(!isOp()){toast("Masuk operator dulu.");return}
+  let made=0;
+  ST.students.filter(s=>activeVal(s.active)).forEach(s=>{
+    if(ST.student_accounts.some(a=>a.studentId===s.id||String(a.name||"").toLowerCase()===String(s.name||"").toLowerCase()))return;
+    const base=String(s.name||"pemelajar").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,".").replace(/^\.+|\.+$/g,"")||("user"+made);
+    ST.student_accounts.push({id:uid("acct"),studentId:s.id,name:s.name,username:base,password:"bipa123",active:"Aktif",lastLogin:""}); made++;
+  });
+  queueSave(); renderPortal(); toast(made?`Berhasil membuat ${made} akun`:"Semua akun sudah ada")
+}
+
+// ===== EVENTS =====
+document.addEventListener("click", e => {
+  // Nav
+  const nav=e.target.closest(".nav-item[data-page]");
+  if(nav){
+    document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+    nav.classList.add("active");
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    $("page-"+nav.dataset.page)?.classList.add("active");
+    const titles={beranda:"Beranda",program:"Program & Semester",dosen:"Daftar Dosen",kalender:"Kalender Dosen",["rekap-dosen"]:"Rekap Dosen",pemelajar:"Data Pemelajar",["rekap-pemelajar"]:"Rekap Kehadiran",kehadiran:"Input Kehadiran",dokumen:"Dokumen Pemelajar",portal:"Portal Pemelajar"};
+    $("pageTitle").textContent=titles[nav.dataset.page]||"";
+    $("sidebar").classList.remove("open");
+    $("sideOverlay").classList.remove("open");
+    renderAll();
+    return
+  }
+  // Goto
+  const gt=e.target.closest("[data-goto]");
+  if(gt){document.querySelector(`.nav-item[data-page="${gt.dataset.goto}"]`)?.click();return}
+  // Add schedule from calendar or day modal
+  const asd=e.target.closest("[data-add-sched-date]");
+  if(asd){ e.stopPropagation(); $("dayModal")?.classList.remove("open"); openForm("jadwal_dosen",null,{date:asd.dataset.addSchedDate,repeatUntil:asd.dataset.addSchedDate,repeatType:asd.dataset.repeatWeekly?"weekly":"none"}); return }
+  // Day open
+  const day=e.target.closest("[data-open-date]");
+  if(day){openDay(day.dataset.openDate);return}
+  // Form save
+  if(e.target.id==="saveFormBtn"){saveEditorForm();return}
+  // Edit row
+  const edit=e.target.closest("[data-edit-table]");
+  if(edit){
+    const arr=ST[edit.dataset.editTable]||[];
+    const row=arr.find(x=>String(x.id)===String(edit.dataset.editId));
+    if(row)openForm(edit.dataset.editTable,row,{date:edit.dataset.datePreset||row.date});
+    else toast("Data tidak ditemukan. Muat ulang halaman lalu coba lagi.");
+    return
+  }
+  // Delete row
+  const del=e.target.closest("[data-del-table]");
+  if(del){
+    if(!isOp()){toast("Masuk operator dulu.");return}
+    const arr=ST[del.dataset.delTable]||[];
+    const idx=arr.findIndex(x=>String(x.id)===String(del.dataset.delId));
+    if(idx>=0&&confirm("Hapus permanen data ini? Data akan hilang dari sheet, bukan dinonaktifkan.")){
+      arr.splice(idx,1);
+      queueSave();renderAll();toast("Data dihapus permanen");
+    }
+    return
+  }
+  // Lecturer grouped actions
+  const addTeach=e.target.closest("[data-add-teaching]");
+  if(addTeach){ openForm("daftar_dosen",null,{lecturer:addTeach.dataset.addTeaching}); return }
+  const delLect=e.target.closest("[data-del-lecturer]");
+  if(delLect){
+    if(!isOp()){toast("Masuk operator dulu.");return}
+    const name=delLect.dataset.delLecturer;
+    if(confirm("Hapus permanen dosen ini beserta semua penugasan kelas/materinya?")){
+      ST.daftar_dosen=ST.daftar_dosen.filter(d=>lecturerKey(d.lecturer)!==lecturerKey(name));
+      queueSave(); renderAll(); toast("Dosen dan semua penugasannya dihapus.");
+    }
+    return
+  }
+  // Add buttons
+  if(e.target.id==="addSemBtn"){addRecord("semesters");return}
+  if(e.target.id==="addProgBtn"){addRecord("programs");return}
+  if(e.target.id==="addClassBtn"){addRecord("classes");return}
+  if(e.target.id==="addHolBtn"){addRecord("hari_libur");return}
+  if(e.target.id==="addDosenBtn"){addRecord("daftar_dosen");return}
+  if(e.target.id==="addSchedBtn"){addRecord("jadwal_dosen");return}
+  if(e.target.id==="addStudentBtn"){addRecord("students");return}
+  if(e.target.id==="addAcctBtn"){addRecord("student_accounts");return}
+  if(e.target.id==="addSessBtn"){addRecord("attendance_sessions");return}
+  if(e.target.id==="addGradeBtn"){addRecord("grades");return}
+  if(e.target.id==="makeAccountsBtn"){makeStudentAccounts();return}
+  if(e.target.id==="openWizardBtn"){openScheduleWizard();return}
+  if(e.target.id==="generateScheduleBtn"){generateScheduleWizard();return}
+  // Close modal
+  const close=e.target.closest("[data-close]");
+  if(close){$(close.dataset.close)?.classList.remove("open");return}
+  // Overlay click
+  if(e.target===e.currentTarget&&e.target.classList.contains("overlay")){e.target.classList.remove("open");return}
+  // Portal tabs
+  const ptab=e.target.closest("[data-ptab]");
+  if(ptab){
+    document.querySelectorAll(".ptab").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".ppanel").forEach(p=>p.classList.remove("active"));
+    ptab.classList.add("active");
+    document.querySelector(`[data-ppanel="${ptab.dataset.ptab}"]`)?.classList.add("active");
+    return
+  }
+  // Login btn
+  if(e.target.id==="loginBtn"){$("loginModal").classList.add("open");return}
+  if(e.target.id==="doLoginBtn"){
+    const u=$("loginUser").value,p=$("loginPass").value;
+    $("loginErr").style.display="none";
+    server("loginOperator",[u,p],r=>{
+      if(!r||!r.ok){$("loginErr").textContent=r?.message||"Login gagal";$("loginErr").style.display="block";return}
+      ST.user=r;ST.token=r.token;sessionStorage.setItem("bipaToken",r.token);
+      $("loginModal").classList.remove("open");toast("Login berhasil");applyMode()
+    },e=>{$("loginErr").textContent=e.message||e;$("loginErr").style.display="block"})
+    return
+  }
+  // Logout
+  if(e.target.id==="logoutBtn"){
+    server("logoutOperator",[ST.token],()=>{},()=>{});
+    ST.user=null;ST.token="";sessionStorage.removeItem("bipaToken");toast("Keluar.");applyMode();return
+  }
+  // Hamburger
+  if(e.target.closest("#hamburgerBtn")||e.target.id==="hamburgerBtn"){
+    $("sidebar").classList.toggle("open");
+    $("sideOverlay").classList.toggle("open");
+    return
+  }
+  if(e.target.id==="sideOverlay"){
+    $("sidebar").classList.remove("open");
+    $("sideOverlay").classList.remove("open")
+  }
+});
+
+document.addEventListener("change", e => {
+  // Event status/substitute from modal
+  const evSel=e.target.closest("[data-ev]");
+  if(evSel){
+    const ev=ST.events.find(x=>x.id===evSel.dataset.ev);
+    if(ev){
+      ev[evSel.dataset.field]=e.target.value;
+      if(evSel.dataset.field==="status"){
+        const sub=document.querySelector(`[data-sub-for="${ev.id}"]`);
+        if(sub){
+          sub.disabled=ev.status!=="Digantikan";
+          if(ev.status!=="Digantikan"){sub.value="";ev.substitute=""}
+        }
+      }
+      queueSave();toast("Tersimpan")
+    }
+    return
+  }
+  // Attendance cell
+  const attSel=e.target.closest("[data-att-id]");
+  if(attSel){
+    const a=ST.attendance.find(x=>x.id===attSel.dataset.attId);
+    if(a){a.status=e.target.value;queueSave();renderKehadiran();renderRekapPemelajar()}
+    return
+  }
+
+  if(ST.form&&ST.form.type==="jadwal_dosen"&&e.target.closest("#recordForm")){
+    const form=$("recordForm"), dateEl=form.querySelector('[name="date"]'), progEl=form.querySelector('[name="program"]'), stEl=form.querySelector('[name="startTime"]'), enEl=form.querySelector('[name="endTime"]'), roomEl=form.querySelector('[name="room"]');
+    if(e.target.name==="date"&&dateEl){ const tt=defaultTimes(dateEl.value); stEl.value=tt.startTime; enEl.value=tt.endTime; }
+    if(e.target.name==="program"&&progEl&&roomEl){ roomEl.value=defaultRoom(progEl.value); }
+  }
+  if(e.target.closest("#wizardForm")&&e.target.name==="program"){
+    const f=$("wizardForm"); if(f&&f.room){ const pr=ST.programs.find(p=>String(p.name||"").toLowerCase()===String(f.program.value||"").toLowerCase())||{}; f.room.value=pr.defaultRoom||defaultRoom(f.program.value); }
+  }
+
+  // Filter changes
+  if(e.target.closest(".filters")||e.target.closest(".filter-select")||e.target.closest(".filter-input")){
+    renderAll()
+  }
+  // rdMode
+  if(e.target.id==="rdMode"){renderRekapDosen()}
+});
+
+document.addEventListener("input", e => {
+  if(e.target.id==="dosenQ"||e.target.id==="stQ"||e.target.id==="docQ"){
+    clearTimeout(e.target._t);e.target._t=setTimeout(()=>renderAll(),220)
+  }
+});
+
+// Fill all H
+$("fillAllBtn")?.addEventListener("click",()=>{
+  const sem=$("khSem")?.value||"all",prog=$("khProg")?.value||"all",cls=$("khClass")?.value||"all";
+  const dates=weekDates($("khWeek")?.value||todayIso()).filter(d=>{const day=parseDate(d).getDay();return day!==0&&day!==6&&!isHoliday(d,sem,prog,cls)});
+  const students=ST.students.filter(s=>activeVal(s.active)&&(sem==="all"||s.semester===sem)&&(prog==="all"||s.program===prog)&&(cls==="all"||s.className===cls));
+  students.forEach(s=>dates.forEach(d=>{
+    let a=ST.attendance.find(x=>x.studentId===s.id&&x.date===d);
+    if(!a){a={id:uid("att"),studentId:s.id,studentName:s.name,semester:sem==="all"?activeSem().id:sem,program:s.program,className:s.className,date:d,status:"H",materi:""};ST.attendance.push(a)}
+    else a.status="H"
+  }));
+  queueSave();renderKehadiran();toast("Semua diset Hadir")
+});
+
+// CSV export
+$("rdCsvBtn")?.addEventListener("click",()=>{
+  const rows=[["Dosen","Kelas/Materi","Hadir","Menggantikan","Digantikan"],...$("rdRows").querySelectorAll("tr")].map(tr=>tr.cells?[...tr.cells].map(td=>td.innerText):[]);
+  downloadCsv("rekap_dosen.csv",rows)
+});
+$("rpCsvBtn")?.addEventListener("click",()=>{
+  const rows=[["No","Nama","Negara","Kelas","Total","H","TH","%"],...$("rpRows").querySelectorAll("tr")].map(tr=>tr.cells?[...tr.cells].map(td=>td.innerText):[]);
+  downloadCsv("rekap_pemelajar.csv",rows)
+});
+$("docCsvBtn")?.addEventListener("click",()=>{
+  const rows=[["Nama","KITAS","Exp KITAS","Paspor","Exp Paspor","Izin Belajar","Exp IB","Surat","CV"],...$("docRows").querySelectorAll("tr")].map(tr=>tr.cells?[...tr.cells].map(td=>td.innerText):[]);
+  downloadCsv("dokumen.csv",rows)
+});
+
+// PDF export rapi via backend, bukan print browser
+$("rdPdfBtn")?.addEventListener("click",()=>exportPdfTable({
+  title:"Rekap Kehadiran Dosen",
+  filename:"rekap_dosen_bipa.pdf",
+  tableBodyId:"rdRows",
+  headers:["Dosen","Kelas / Materi","Hadir","Tanggal Hadir","Menggantikan","Digantikan"],
+  summary:["Mode: "+($("rdMode")?.value==="month"?"Per Bulan":"Per Semester"),"Filter Semester: "+selectedText("rdSem"),"Filter Program: "+selectedText("rdProg"),"Jumlah Baris: "+countBodyRows("rdRows")],
+  maxCols:6
+}));
+$("rpPdfBtn")?.addEventListener("click",()=>exportPdfTable({
+  title:"Rekap Kehadiran Pemelajar",
+  filename:"rekap_pemelajar_bipa.pdf",
+  tableBodyId:"rpRows",
+  headers:["No","Nama","Negara","Kelas","Total Pertemuan","H","TH","% Hadir"],
+  summary:["Filter Semester: "+selectedText("rpSem"),"Filter Program: "+selectedText("rpProg"),"Filter Kelas: "+selectedText("rpClass"),"Jumlah Pemelajar: "+countBodyRows("rpRows")],
+  maxCols:8
+}));
+$("docPdfBtn")?.addEventListener("click",()=>exportPdfTable({
+  title:"Rekap Dokumen Pemelajar",
+  filename:"rekap_dokumen_bipa.pdf",
+  tableBodyId:"docRows",
+  headers:["Nama","KITAS","Kadaluarsa KITAS","Paspor","Kadaluarsa Paspor","Izin Belajar","Kadaluarsa","Surat Pernyataan","CV"],
+  summary:["Filter Semester: "+selectedText("docSem"),"Filter Program: "+selectedText("docProg"),"Filter Kelas: "+selectedText("docClass"),"Jumlah Data: "+countBodyRows("docRows")],
+  maxCols:9
+}));
+
+function selectedText(id){const el=$(id);return el&&el.options&&el.selectedIndex>=0?el.options[el.selectedIndex].text:"-"}
+function countBodyRows(id){const body=$(id);return body?[...body.querySelectorAll("tr")].filter(tr=>!tr.classList.contains("table-empty")).length:0}
+function cleanCellText(txt){return String(txt||"").replace(/\s+/g," ").trim()}
+function tableRowsForPdf(bodyId,maxCols){
+  const body=$(bodyId);
+  if(!body)return [];
+  return [...body.querySelectorAll("tr")].filter(tr=>!tr.classList.contains("table-empty")).map(tr=>[...tr.cells].slice(0,maxCols).map(td=>cleanCellText(td.innerText)));
+}
+function exportPdfTable(cfg){
+  if(!canServer()){toast("Export PDF harus dibuka dari Apps Script Web App.");return}
+  const payload={title:cfg.title,filename:cfg.filename,subtitle:"Portal BIPA Unpad · "+new Date().toLocaleString("id-ID"),headers:cfg.headers,rows:tableRowsForPdf(cfg.tableBodyId,cfg.maxCols),summary:cfg.summary};
+  toast("Membuat PDF...");
+  server("exportReportPdf",[payload],res=>{
+    if(!res||!res.ok){toast("Gagal membuat PDF");return}
+    const a=document.createElement("a");
+    a.href="data:"+(res.mimeType||"application/pdf")+";base64,"+res.base64;
+    a.download=res.filename||cfg.filename;
+    document.body.appendChild(a);a.click();a.remove();
+    toast("PDF siap diunduh");
+  },err=>toast("Gagal export PDF: "+(err.message||err)))
+}
+
+function downloadCsv(name,rows){
+  const csv=rows.filter(r=>Array.isArray(r)).map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=name;a.click()
+}
+
+
+$("calMonth").value=thisMonth();
+$("khWeek").value=startOfWeek(todayIso());
+refreshFilters();
+load();
+</script>
+</body>
+</html>
